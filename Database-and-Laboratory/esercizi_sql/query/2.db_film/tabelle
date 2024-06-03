@@ -1,0 +1,37 @@
+ FILM:
+ codicefilm |     titolo      |    regista     | anno
+------------+-----------------+----------------+------
+          1 | Rashomon        | Akira Kurosawa | 1950
+          2 | I Sette Samurai | Akira Kurosawa | 1954
+          3 | Trono di Sangue | Gerry Scotti   | 1957
+          4 | Barriera        | Toshio Masuda  | 1971
+          5 | Ran             | Akira Kurosawa | 1985
+
+
+ ATTORE:
+ codiceattore | cognome  |  nome   | sesso | datanascita | nazionalità
+--------------+----------+---------+-------+-------------+-------------
+            1 | Mifune   | Toshiro | M     | 1920-04-01  | Giapponese
+            2 | Shimura  | Takashi | M     | 1905-03-12  | Giapponese
+            3 | Kagawa   | Kyōko   | F     | 1931-12-05  | Giapponese
+            4 | Nakadai  | Tatsuya | M     | 1932-12-13  | Giapponese
+            5 | Yamazaki | Tsutomu | M     | 1936-12-31  | Giapponese
+
+
+INTERPRETAZIONE:
+ film | attore |       ruolo
+------+--------+--------------------
+    1 |      1 | Bandito
+    1 |      2 | Testimone
+    1 |      3 | Moglie del samurai
+    2 |      1 | Rōnin
+    2 |      2 | Villaggio leader
+    2 |      5 | Samurai
+    3 |      1 | Signore feudale
+    3 |      2 | Comandante
+    3 |      4 | Generale
+    4 |      1 | Suino
+    4 |      3 | Negro
+    5 |      1 | Hidetora Ichimonji
+    5 |      4 | Saburo
+    5 |      5 | Kyoami
