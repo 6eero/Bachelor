@@ -44,7 +44,10 @@ INSERT INTO Festival (NomeFestival, Luogo, Anno) VALUES
 ('Festival di Venice', 'Venice', 2020),
 ('Festival di Venice', 'Venice', 2021),
 ('Festival di Berlin', 'Berlin', 2020),
-('Festival di Berlin', 'Berlin', 2021);
+('Festival di Berlin', 'Berlin', 2021),
+('Festival del cinema muto', 'Roma', 2020),
+('Festival del cinema muto', 'Roma', 2021),
+('Festival del cinema muto', 'Roma', 2022);
 
 INSERT INTO Partecipazione (Film, Festival, Anno, Posizione) VALUES
 (1, 'Festival di Cannes', 2020, 1),
@@ -58,4 +61,10 @@ INSERT INTO Partecipazione (Film, Festival, Anno, Posizione) VALUES
 (4, 'Festival di Berlin', 2021, 1),
 (5, 'Festival di Berlin', 2021, 1),
 (6, 'Festival di Berlin', 2021, 1),
-(1, 'Festival di Berlin', 2021, 2);
+(1, 'Festival di Berlin', 2021, 2),
+
+(1, 'Festival del cinema muto', 2020, 1),
+(2, 'Festival del cinema muto', 2021, 2),
+(3, 'Festival del cinema muto', 2022, 3),
+
+(4, 'Festival del cinema muto', 2021, 1);
