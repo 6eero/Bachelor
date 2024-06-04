@@ -35,9 +35,35 @@ SELECT Stadio
 FROM HaGiocato
 WHERE Nazionale = 'Belgio';
 
-/*
+
 -- 2.1: Le nazioni che hanno giocato solo in stadi in cui ha giocato il Belgio
---      Non esiste un stadio in cui non ha giocato il Belgio in cui il candidato ha giocato
+--      Non esiste un stadio in cui non ha giocato il Belgio in cui il candidato 
+--      ha giocato
+
+create view hagiocato as
+select nazionale1 as nazionale, stadio
+from partita
+UNION
+select nazionale2 as nazionale, stadio
+from partita;
+
+create view stadioincuinonhagiocatoilbelgio as
+select *
+from hagiocato
+where nazionale <> 'Belgio';
+
+
+select nazionale
+from hagiocato h
+where not exists (
+    select *
+    from stadioincuinonhagiocatoilbelgio s
+    where s.stadio = h.stadio and s.nazionale <> h.nazionale
+);
+
+
+
+/*
 SELECT DISTINCT Nazionale
 FROM HaGiocato HG1
 WHERE Nazionale <> 'Belgio'
@@ -72,11 +98,11 @@ AND NOT EXISTS (                -- 2.1: Le nazioni che hanno giocato solo in sta
     SELECT *
     FROM HaGiocato HG2
     WHERE HG2.Nazionale = HG1.Nazionale
-    AND HG2.Stadio NOT IN (SELECT Stadio FROM StadioDoveHaGiocatoIlBelgio)
+    AND HG2.Stadio NOT IN (SELECT Stadio FROM stadioincuihagiocatoilbelgio)
 )
 AND NOT EXISTS (                -- 2.2: Le nazioni che hanno giocato in tutti gli stadi in ha giocato il Belgio
     SELECT *
-    FROM StadioDoveHaGiocatoIlBelgio S
+    FROM stadioincuihagiocatoilbelgio S
     WHERE NOT EXISTS (
         SELECT *
         FROM HaGiocato HG2
