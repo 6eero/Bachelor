@@ -80,33 +80,22 @@ and not exists (
     and c3.teatro <> c1.teatro
 );
 */
--- QUERY 2:  i teatri che nella stagione 2020 avevano in cartellone tutte le opere presenti nel cartellone del 'teatro 2'
---           di quell’anno.
+-- QUERY 2:  i teatri che nella stagione 2020 avevano in cartellone tutte le opere presenti 
+--           nel cartellone del 'teatro 2' di quell’anno.
 
-create view opereteatro2 as
-select opera
-from cartellone
-where anno = '2020'
-and teatro = 'teatro 2';
-
-create view teatricheespongonoalmenounoperadelteatro2 as
-select c.opera, teatro
-from cartellone c, opereteatro2 o
-where anno = '2020'
-and o.opera = c.opera;
 
 select distinct teatro
-from teatricheespongonoalmenounoperadelteatro2 t1
-where teatro <> 'teatro 2' 
+from cartellone c1
+where c1.teatro <> 'teatro 2'
+and c1.anno = '2020'
 and not exists (
     select *
-    from opereteatro2 o
-    where not exists (
+    from cartellone c2
+    where c2.teatro = 'teatro 2'
+    and not exists (
         select *
-        from teatricheespongonoalmenounoperadelteatro2 t2
-        where t2.teatro = t1.teatro
-        and t2.opera = o.opera
+        from cartellone c3
+        where c3.teatro = c1.teatro
+        and c3.opera = c2.opera
     )
 );
-
-drop view opereteatro2 cascade;
