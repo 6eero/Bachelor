@@ -4,8 +4,11 @@
 --          (ii) almeno uno di loro risieda nella citta' Torino;
 
 -- (i) -> non esiste un medico che non risiede in una citta' del piemonte (ortopedia, ginecologia)
+
 create view medicoo as
-select medicoid, reparto, cittaresidenza, regione from medico m, si_trova_in s where m.cittaresidenza = s.citta;
+select medicoid, reparto, cittaresidenza, regione 
+from medico m, si_trova_in s 
+where m.cittaresidenza = s.citta;
 
 select distinct reparto
 from medicoo d
@@ -26,6 +29,7 @@ and exists (
 drop view medicoo;
 
 -- QUERY 2: i reparti con lo stesso numero di medici del reparto di terapia intensiva
+
 create view numeromedicinelrepartoterapiaintensiva as
 select reparto, count(*) as numero_medici
 from medico
@@ -81,3 +85,46 @@ and exists (
         where d2.reparto = d.reparto
     )
 );
+
+-- QUERY 4: i reparti in cui sono presenti sia medici di sesso femminile che medici di sesso maschile, 
+--          tutti nati dopo il 1960 (al piu 59 anni);
+
+-- esiste un medico maschio con anno nascita > 1960
+-- siste un medico femmina con anno nascita > 1960
+-- nello stesso reparto
+
+select distinct reparto
+from medico m
+where exists (
+    select *
+    from medico m1
+    where m1.medicoid = m.medicoid
+    and m1.genere = 'Maschio'
+    and m1.annonascita > 1960
+    and exists (
+        select *
+        from medico m2
+        where m2.reparto = m1.reparto
+        and m2.genere = 'Femmina'
+        and m2.annonascita > 1960
+    )
+);
+
+-- QUERY 5: (FACOLTATIVO) i reparti col numero piu' alto di medici di sesso femminile.
+
+create view donneneireparti as
+select reparto, count(*) as numerodonne
+from medico m
+where m.genere = 'Femmina'
+group by reparto;
+
+select reparto
+from donneneireparti d
+where not exists (
+    select *
+    from donneneireparti d1
+    where d.reparto <> d1.reparto
+    and d1.numerodonne > d.numerodonne
+);
+
+drop view donneneireparti;

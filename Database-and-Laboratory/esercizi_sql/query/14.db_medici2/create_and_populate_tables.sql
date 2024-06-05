@@ -50,7 +50,7 @@ INSERT INTO MEDICO (MedicoId, Nome, Cognome, Specializzazione, Genere, AnnoNasci
 (4, 'Paolo', 'Neri', 'Terapia Intensiva', 'Maschio', 1985, 'Terapia Intensiva', 'Udine'),
 (5, 'Laura', 'Bruno', 'Cardiologia', 'Femmina', 1982, 'Cardiologia', 'Torino'),
 (6, 'Giorgio', 'Gialli', 'Cardiologia', 'Maschio', 1978, 'Cardiologia', 'Roma'),
-(7, 'Lucia', 'Viola', 'Chirurgia', 'Femmina', 1979, 'Chirurgia', 'Biella'),
+(7, 'Lucia', 'Viola', 'Chirurgia', 'Femmina', 1950, 'Chirurgia', 'Biella'),
 
 (8, 'Maria', 'Rosa', 'Ginecologia', 'Femmina', 1975, 'Ginecologia', 'Torino'),
 (9, 'Mattea', 'Verfina', 'Ginecologia', 'Femmina', 1939, 'Ginecologia', 'Biella'),
