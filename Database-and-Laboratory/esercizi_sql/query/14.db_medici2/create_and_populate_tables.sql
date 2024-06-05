@@ -33,27 +33,33 @@ CREATE TABLE SI_TROVA_IN (
 -- Popolamento della tabella SI_TROVA_IN
 INSERT INTO SI_TROVA_IN (Citta, Regione) VALUES
 ('Torino', 'Piemonte'),
-('Venezia', 'Veneto'),
-('Novara', 'Piemonte'),
-('Udine', 'Friuli Venezia Giulia'),
-('Roma', 'Lazio'),
 ('Biella', 'Piemonte'),
-('Vercelli', 'Piemonte'),
-('Verbania', 'Piemonte');
+('Novara', 'Piemonte'),
+
+('Venezia', 'Veneto'),
+('Udine', 'Friuli Venezia Giulia'),
+('Roma', 'Lazio');
 
 -- Popolamento della tabella MEDICO
 INSERT INTO MEDICO (MedicoId, Nome, Cognome, Specializzazione, Genere, AnnoNascita, Reparto, CittaResidenza) VALUES
 (1, 'Mario', 'Rossi', 'Cardiologia', 'Maschio', 1970, 'Cardiologia', 'Torino'),
 (2, 'Luigi', 'Bianchi', 'Chirurgia', 'Maschio', 1975, 'Chirurgia', 'Venezia'),
+
 (3, 'Anna', 'Verdi', 'Ortopedia', 'Femmina', 1980, 'Ortopedia', 'Novara'),
+
 (4, 'Paolo', 'Neri', 'Terapia Intensiva', 'Maschio', 1985, 'Terapia Intensiva', 'Udine'),
 (5, 'Laura', 'Bruno', 'Cardiologia', 'Femmina', 1982, 'Cardiologia', 'Torino'),
 (6, 'Giorgio', 'Gialli', 'Cardiologia', 'Maschio', 1978, 'Cardiologia', 'Roma'),
-(7, 'Lucia', 'Viola', 'Chirurgia', 'Femmina', 1979, 'Chirurgia', 'Biella');
+(7, 'Lucia', 'Viola', 'Chirurgia', 'Femmina', 1979, 'Chirurgia', 'Biella'),
+
+(8, 'Maria', 'Rosa', 'Ginecologia', 'Femmina', 1975, 'Ginecologia', 'Torino'),
+(9, 'Mattea', 'Verfina', 'Ginecologia', 'Femmina', 1939, 'Ginecologia', 'Biella'),
+(10, 'Ettora', 'Rossina', 'Ginecologia', 'Femmina', 1934, 'Ginecologia', 'Novara');
 
 -- Popolamento della tabella REPARTO
 INSERT INTO REPARTO (Nome, Edificio, Piano, Primario) VALUES
 ('Cardiologia', 'Edificio A', 1, 1),
 ('Chirurgia', 'Edificio B', 2, 2),
 ('Ortopedia', 'Edificio C', 3, 3),
-('Terapia Intensiva', 'Edificio D', 4, 4);
+('Terapia Intensiva', 'Edificio D', 4, 4),
+('Ginecologia', 'Edificio E', 5, 5);
