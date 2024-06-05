@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS filmeattori;
 CREATE DATABASE filmeattori;
 \c filmeattori
 
@@ -50,11 +51,9 @@ INSERT INTO INTERPRETAZIONE (Film, Attore, Ruolo) VALUES
     (2, 1, 'Rōnin'),
     (2, 2, 'Villaggio leader'),
     (2, 5, 'Samurai'),
-    (3, 1, 'Signore feudale'),
     (3, 2, 'Comandante'),
     (3, 4, 'Generale'),
-    (4, 1, 'Suini'),
-    (4, 3, 'I negri'),
+    (4, 3, 'Venditore'),
     (5, 1, 'Hidetora Ichimonji'),
     (5, 4, 'Saburo'),
     (5, 5, 'Kyoami');
