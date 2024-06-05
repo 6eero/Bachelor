@@ -41,13 +41,14 @@ INSERT INTO ATTORE (CodiceAttore, Cognome, Nome, Sesso, DataNascita, Nazionalit�
     (2, 'Shimura', 'Takashi', 'M', '1905-03-12', 'Giapponese'),
     (3, 'Kagawa', 'Kyōko', 'F', '1931-12-05', 'Giapponese'),
     (4, 'Nakadai', 'Tatsuya', 'M', '1932-12-13', 'Giapponese'),
-    (5, 'Yamazaki', 'Tsutomu', 'M', '1936-12-31', 'Giapponese');
+    (5, 'Yamazaki', 'Tsutomu', 'M', '1936-12-31', 'Giapponese'),
+    (6, 'Kawasaki', 'Suzuki', 'M', '1916-11-22', 'Giapponese');
 
 -- Popolare la tabella INTERPRETAZIONE con dati fittizzi
 INSERT INTO INTERPRETAZIONE (Film, Attore, Ruolo) VALUES
     (1, 1, 'Bandito'),
     (1, 2, 'Testimone'),
-    (1, 3, 'Moglie del samurai'),
+    (3, 1, 'Cecchino'),
     (2, 1, 'Rōnin'),
     (2, 2, 'Villaggio leader'),
     (2, 5, 'Samurai'),
@@ -56,5 +57,8 @@ INSERT INTO INTERPRETAZIONE (Film, Attore, Ruolo) VALUES
     (4, 3, 'Venditore'),
     (5, 1, 'Hidetora Ichimonji'),
     (5, 4, 'Saburo'),
-    (5, 5, 'Kyoami');
+    (5, 5, 'Kyoami'),
+    (1, 6, 'Soldato'),
+    (2, 6, 'Sceriffo'),
+    (5, 6, 'Militare');
 
