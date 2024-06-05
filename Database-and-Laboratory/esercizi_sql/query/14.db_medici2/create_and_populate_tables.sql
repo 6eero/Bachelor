@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS medici2;
+CREATE DATABASE medici2;
+\c medici2
