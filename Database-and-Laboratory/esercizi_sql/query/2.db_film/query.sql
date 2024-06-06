@@ -16,6 +16,7 @@ where not exists (
 
 drop view numerorecitazioni;
 
+
 -- QUERY 2: con riferimento ai soli film del regista Akira Kurosawa, gli attori che hanno recitato assieme in al massimo un film
 
 select distinct i1.attore, i2.attore
@@ -61,6 +62,7 @@ and exists (
     )
 );
 
+
 -- QUERY 4:  gli attori che non hanno recitato in alcun film di Akira Kurosawa;
 -- non esiste un film di akira kurosawa in cui il candidato ha recitato
 
@@ -77,6 +79,7 @@ where not exists (
         and i2.film = f.codicefilm
     )
 );
+
 
 -- QUERY 5:  per ogni regista, i film da lui/lei diretto col minor numero di attori;
 
@@ -98,9 +101,10 @@ where not exists (
 
 drop view numeroattori;
 
--- QUERY 6: gli attori che hanno recitato in tutti i film di Akira Kurosawa e in almeno un film di un altro regista
 
+-- QUERY 6: gli attori che hanno recitato in tutti i film di Akira Kurosawa e in almeno un film di un altro regista
 --  non esiste un film di Kurosawa in cui l'attore candidato non ha recitato
+
 select distinct attore
 from interpretazione i1
 where not exists (
@@ -127,6 +131,7 @@ and exists (
     )
 );
 
+
 -- QUERY 7: gli attori che hanno recitato solo in film di Kurosawa
 -- non esiste un film f1, il cui regista non e' kurosawa, per cui esiste un attore, uguale al candidato, che ha recitato in quel film f1
 
@@ -144,6 +149,7 @@ where not exists (
     )
 );
 
+
 -- QUERY 8: gli attori che hanno recitato in tutti i film di Kurosawa;
 -- non esiste un film di Kurosawa per cui non esiste un attore uguale al candidato che ha recitato in quel film
 
@@ -160,6 +166,7 @@ where not exists (
         and i2.film = f1.codicefilm
     )
 );
+
 
 -- QUERY 9: gli attori che hanno recitato in tutti e soli i film di Kurosawa.
 -- AND delle soluzioni sopra
@@ -188,3 +195,24 @@ and not exists (
         and i2.film = f1.codicefilm
     )
 );
+
+
+-- QUERY 10: gli attori che hanno recitato in al massimo due film diretti dal regista 'Akira Kurosawa' (2, 3, 4, 5)
+-- non eistono tre film diversi con regista kurosawa per cui lo stesso candidato attore ha recitato
+
+create view harecitato as
+select i.film, i.attore, f.regista
+from interpretazione i, film f
+where i.film = f.codicefilm;
+
+select *
+from harecitato h1
+where  not exists (
+    select *
+    from harecitato h2, harecitato h3
+    where h1.film <> h2.film and h2.film <> h3.film and h3.film <> h1.film  -- tre film diversi
+    and h2.regista = 'Akira Kurosawa' and h3.regista = 'Akira Kurosawa'     -- con regista kurosawa
+    and h1.attore = h2.attore and h2.attore = h3.attore                     -- con lo stesso attore
+);
+
+-- QUERY 11: le coppie di attori tali che esista un film in cui il primo ha recitato e il secondo no, e viceversa.

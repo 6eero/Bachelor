@@ -61,4 +61,3 @@ INSERT INTO INTERPRETAZIONE (Film, Attore, Ruolo) VALUES
     (1, 6, 'Soldato'),
     (2, 6, 'Sceriffo'),
     (5, 6, 'Militare');
-
