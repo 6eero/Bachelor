@@ -19,23 +19,22 @@ drop view numerorecitazioni;
 
 -- QUERY 2: con riferimento ai soli film del regista Akira Kurosawa, gli attori che hanno recitato assieme in al massimo un film
 
-select distinct i1.attore, i2.attore
-from interpretazione i1, interpretazione i2, film f
-where i1.film = i2.film
+select i1.attore, i2.attore, f1.codicefilm
+from interpretazione i1, interpretazione i2, film f1
+where f1.regista = 'Akira Kurosawa'
 and i1.attore < i2.attore
-and i1.film = f.codicefilm
-and f.regista = 'Akira Kurosawa'
+and i1.film = f1.codicefilm
+and i2.film = f1.codicefilm
 and not exists (
-	select *
-	from interpretazione i3, interpretazione i4, film f2
-	where i3.film = i4.film
-	and i3.attore = i1.attore
-	and i4.attore = i2.attore
-	and i3.film = f2.codicefilm
-	and f2.regista = 'Akira Kurosawa'
-	and i3.film <> i1.film
+    select *
+    from interpretazione i3, interpretazione i4, film f2
+    where f2.regista = 'Akira Kurosawa'
+    and i3.attore = i1.attore
+    and i4.attore = i2.attore
+    and i3.film = f2.codicefilm
+    and i4.film = f2.codicefilm
+    and f2.codicefilm <> f1.codicefilm
 );
-
 
 -- QUERY 3: gli attori che hanno recitato solo in film di Akira Kurosawa, ma non in tutti.
 -- non esiste un film dell' attore candidato, che ha regista diverso da kurosawa
@@ -215,4 +214,30 @@ where  not exists (
     and h1.attore = h2.attore and h2.attore = h3.attore                     -- con lo stesso attore
 );
 
--- QUERY 11: le coppie di attori tali che esista un film in cui il primo ha recitato e il secondo no, e viceversa.
+-- QUERY 11: le coppie di attori diversi tali che esista un film in cui il primo ha recitato e il secondo no, e viceversa.
+
+select distinct i1.attore, i2.attore
+from interpretazione i1, interpretazione i2
+where i1.attore <> i2.attore
+and exists (
+    select *
+    from interpretazione i3
+    where i3.attore = i1.attore
+    and not exists (
+        select *
+        from interpretazione i4
+        where i4.film = i3.film
+        and i4.attore =i2.attore
+    )
+)
+and exists (
+    select *
+    from interpretazione i5
+    where i5.attore = i2.attore
+    and not exists (
+        select *
+        from interpretazione i6
+        where i6.film = i5.film
+        and i6.attore = i1.attore
+    )
+);

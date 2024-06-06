@@ -51,13 +51,15 @@ INSERT INTO INTERPRETAZIONE (Film, Attore, Ruolo) VALUES
     (3, 1, 'Cecchino'),
     (2, 1, 'Rōnin'),
     (2, 2, 'Villaggio leader'),
-    (2, 5, 'Samurai'),
+ --   (2, 5, 'Samurai'),
     (3, 2, 'Comandante'),
-    (3, 4, 'Generale'),
+--    (3, 4, 'Generale'),
     (4, 3, 'Venditore'),
-    (5, 1, 'Hidetora Ichimonji'),
-    (5, 4, 'Saburo'),
-    (5, 5, 'Kyoami'),
-    (1, 6, 'Soldato'),
-    (2, 6, 'Sceriffo'),
-    (5, 6, 'Militare');
+    (4, 1, 'Clown'),
+    (5, 1, 'Hidetora Ichimonji')
+--    (5, 4, 'Saburo'),
+--    (5, 5, 'Kyoami'),
+--    (1, 6, 'Soldato'),
+--   (2, 6, 'Sceriffo'),
+--    (5, 6, 'Militare')
+;

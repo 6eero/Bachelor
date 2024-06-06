@@ -1,4 +1,4 @@
-/*
+
 --  QUERY 1: i turisti che nel 2018 hanno visitato almeno una citta della propria nazione e nessuna citta di altre nazioni;
 
 SELECT H.TuristaId, H.Citta, H.Anno, S.Nazione
@@ -72,6 +72,5 @@ WHERE NOT EXISTS (
 );
 
 DROP VIEW ViaggiDiTuristiNonFrancesiNel2020 CASCADE;
-*/
 
 -- QUERY 4:  i turisti che nell’anno 2021 hanno effettuato delle visite (esattamente) nelle stesse nazioni
