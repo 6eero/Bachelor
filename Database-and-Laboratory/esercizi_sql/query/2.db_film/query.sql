@@ -109,3 +109,65 @@ and exists (
         and i2.film = f.codicefilm
     )
 );
+
+-- QUERY 7: gli attori che hanno recitato solo in film di Kurosawa
+-- non esiste un film f1, il cui regista non e' kurosawa, per cui esiste un attore, uguale al candidato, che ha recitato in quel film f1
+
+select distinct attore
+from interpretazione i1
+where not exists (
+    select *
+    from film f1
+    where f1.regista <> 'Akira Kurosawa'
+    and exists (
+        select *
+        from interpretazione i2
+        where i1.attore = i2.attore
+        and i2.film = f1.codicefilm
+    )
+);
+
+-- QUERY 8: gli attori che hanno recitato in tutti i film di Kurosawa;
+-- non esiste un film di Kurosawa per cui non esiste un attore uguale al candidato che ha recitato in quel film
+
+select distinct attore
+from interpretazione i1
+where not exists (
+    select *
+    from film f1
+    where f1.regista = 'Akira Kurosawa'
+    and not exists (
+        select *
+        from interpretazione i2
+        where i1.attore = i2.attore
+        and i2.film = f1.codicefilm
+    )
+);
+
+-- QUERY 9: gli attori che hanno recitato in tutti e soli i film di Kurosawa.
+-- AND delle soluzioni sopra
+
+select distinct attore
+from interpretazione i1
+where not exists (
+    select *
+    from film f1
+    where f1.regista <> 'Akira Kurosawa'
+    and exists (
+        select *
+        from interpretazione i2
+        where i1.attore = i2.attore
+        and i2.film = f1.codicefilm
+    )
+)
+and not exists (
+    select *
+    from film f1
+    where f1.regista = 'Akira Kurosawa'
+    and not exists (
+        select *
+        from interpretazione i2
+        where i1.attore = i2.attore
+        and i2.film = f1.codicefilm
+    )
+);
