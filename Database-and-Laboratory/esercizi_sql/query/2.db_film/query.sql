@@ -17,7 +17,24 @@ where not exists (
 drop view numerorecitazioni;
 
 -- QUERY 2: con riferimento ai soli film del regista Akira Kurosawa, gli attori che hanno recitato assieme in al massimo un film
--- ????????????????????????
+
+select distinct i1.attore, i2.attore
+from interpretazione i1, interpretazione i2, film f
+where i1.film = i2.film
+and i1.attore < i2.attore
+and i1.film = f.codicefilm
+and f.regista = 'Akira Kurosawa'
+and not exists (
+	select *
+	from interpretazione i3, interpretazione i4, film f2
+	where i3.film = i4.film
+	and i3.attore = i1.attore
+	and i4.attore = i2.attore
+	and i3.film = f2.codicefilm
+	and f2.regista = 'Akira Kurosawa'
+	and i3.film <> i1.film
+);
+
 
 -- QUERY 3: gli attori che hanno recitato solo in film di Akira Kurosawa, ma non in tutti.
 -- non esiste un film dell' attore candidato, che ha regista diverso da kurosawa
