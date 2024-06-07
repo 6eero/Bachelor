@@ -1,0 +1,96 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Es_4) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(define lsd
+  (lambda (str)
+    (if (string=? str "")
+        #\.
+        (substring str (- (string-length str) 1)))
+    ))
+
+(define head
+  (lambda (str)
+    (if (string=? str "")
+        ""
+        (substring str 0 (- (string-length str) 1)))
+    ))
+
+(define btr_small_sum
+  (lambda (a b)
+    (if (char=? a #\.)
+        b
+        (if (char=? b #\.)
+            a
+            (if (char=? a b)
+                (if (char=? a #\+)
+                    #\-
+                    #\+)
+                #\.)))
+    ))
+
+(define btr_small_carry
+  (lambda (a b)
+    (cond ((and (char=? a b) (not (char=? a #\.)))
+        (if (char=? a #\+)
+            #\+
+            #\-))
+        (else #\.))
+    ))
+
+(define btr_digit_sum
+  (lambda (a b carry)
+    (if (char=? carry #\.)
+        (btr_small_sum a b)
+        (btr_small_sum a (btr_small_sum b carry)))
+    ))
+
+(define btr_digit_carry
+  (lambda (a b carry)
+    (if (char=? carry #\.)
+        (btr_small_carry a b)
+        (cond ((and (char=? a carry)
+                    (char=? a b))
+               carry)
+              ((and (or (char=? a #\.) (char=? b #\.))
+                    (or (char=? a carry) (char=? b carry)))
+               carry)
+              (else #\.)))
+    ))
+
+(define normalized_btr
+  (lambda (btr)
+    (cond ((and (> (string-length btr) 1)
+                (char=? (string-ref btr 0) #\.))
+           (normalized_btr (substring btr 1)))
+           (else btr))
+    ))
+
+(define btr_carry_sum
+  (lambda (btr_1 btr_2 carry)
+    (cond ((and (string=? btr_1 "")
+                (string=? btr_2 ""))
+           carry)
+          (else
+           (string-append (string (btr_carry_sum
+                                   (head btr_1)
+                                   (head btr_2)
+                                   (btr_digit_carry (lsd btr_1)
+                                                    (lsd btr_2)
+                                                    carry)))
+                          (btr_digit_sum (lsd btr_1)
+                                         (lsd btr_2)
+                                         carry))))
+    ))
+          
+
+(define btr_sum
+  (lambda (btr_1 btr_2)
+    (normalized_btr
+     (string-append
+      (btr_carry_sum (head btr_1)
+                     (head btr_2)
+                     #\.)
+      (string (btr_small_sum btr_1 btr_2))))
+    ))
+
+(btr_sum "-+--" "+")

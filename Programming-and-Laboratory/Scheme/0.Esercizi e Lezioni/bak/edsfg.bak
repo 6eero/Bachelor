@@ -1,0 +1,33 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname edsfg) (read-case-sensitive #t) (teachpacks ((lib "drawings.ss" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "drawings.ss" "installed-teachpacks")) #f)))
+(define parity-check-failures  ; val: lista di interi
+  (lambda (lista)               ; list: lista di stringhe binarie
+
+    (cond
+      ((null? lista) null)
+      ((= (length lista) 1) (if (even? (f (car lista)))
+                               null
+                               (cons (+ 0 1) null)))
+      (else (append
+             (parity-check-failures (list (car lista)))
+             (parity-check-failures (cdr lista))))
+      )
+    ))
+
+
+(define f       ; val: intero (numero di 1 nella stringa)
+  (lambda (bin) ; bin: stringa
+
+    (cond
+      ((string=? bin "") 0)
+      ((string=? bin "1") 1)
+      ((string=? bin "0") 0)
+      (else (+
+             (f (substring bin 0 1))
+             (f (substring bin 1 (string-length bin))))
+
+
+    ))))
+
+(parity-check-failures '("0111" "1001" "1011"))

@@ -1,0 +1,33 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 0.2.2_Ricorsione_utilizzo_del_let) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(define compl-a-uno ; val stringa
+  (lambda (seq)     ; seq: stringa non vuota di 0 e 1
+    (let ((n (string-length seq)) ; utilizzo il simbolo n per denotare la lunghezza
+                                  ; della stringa: ATTENZIONE, la variabile n
+                                  ; funziona solo dentro le parentesi del let
+          )
+    (if (>= n 2); se la steinga é almenop lunga 2
+        (let ((k (quotien n 2))
+              )
+        (string-append
+     
+         ; suddivisione della stringa in due parti: una dalla posizione 0
+         ; fino alla k, una dall posizione k fino all'ultima
+         (delega (substring seq 0 k)) 
+         (delega (substring seq k))
+         ))
+        (compl seq)
+        ))
+  ))
+
+;-------------------------------------------------------------------
+; DEFINE VS LET
+
+; define:
+; -non restituisce un valore.
+; -qualcosa definito con il define funziona in tutto il programma
+
+; let:
+; -restituisce un valore.
+; -qualcosa definito con il let funziona solo tra le sue parentesi

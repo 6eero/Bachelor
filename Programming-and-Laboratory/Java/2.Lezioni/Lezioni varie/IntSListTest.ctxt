@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=IntSListTest
+comment1.params=inf\ sup
+comment1.target=IntSList\ range(int,\ int)
+comment2.params=x\ s
+comment2.target=IntSList\ ins(int,\ IntSList)
+comment3.params=args
+comment3.target=void\ main(java.lang.String[])
+numComments=4

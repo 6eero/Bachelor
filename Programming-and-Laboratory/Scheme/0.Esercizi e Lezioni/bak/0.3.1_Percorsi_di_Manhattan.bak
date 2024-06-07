@@ -1,0 +1,20 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 0.3.1_Percorsi_di_Manhattan) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; Considera una rete urbana organizzata nello stile del quartiere "Manhattan"
+;; di New York, dove tutte le vie si incrociano perpendicolarmente e tutti gli
+;; isolati in cui sorgono gli edifici hanno pianta quadrata con i lati della
+;; stessa lunghezza L.
+
+;; Per semplicità possiamo supporre che le vie siano orientate orizzontalmente
+;; o verticalmente in una mappa. Se A e B individuano due incroci che distano
+;; i isolati in direzione verticale e j isolati in direzione orizzontale,
+;; allora ogni percorso da A a B che non sia più lungo del necessario misura
+;; (i + j)L.
+
+;; Quanti percorsi alternativi di questo tipo ci sono? In altri termini,
+;; qual è il numero paths(i, j) di percorsi diversi di lunghezza minima
+;; dall'incorocio A all'incrocio B?
+
+
+

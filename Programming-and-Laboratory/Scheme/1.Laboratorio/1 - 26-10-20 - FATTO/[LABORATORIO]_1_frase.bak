@@ -1,0 +1,35 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |[LABORATORIO]_1_frase|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(define frase     ; var: stinga
+  (lambda (s v c) ; s, v, c: stringhe
+
+    ; primo articolo
+
+    (let((a (cond
+              [(char=? (string-ref s (- (string-length s) 1)) #\o) "il"]
+              [(char=? (string-ref s (- (string-length s) 1)) #\a) "la"]
+              [(char=? (string-ref s (- (string-length s) 1)) #\e) "le"]
+              [(char=? (string-ref s (- (string-length s) 1)) #\i) "i"])))
+
+
+
+        (string-append a s v c) 
+
+
+        )
+    
+
+    
+    ))
+
+(frase "gatto" "caccia" "topi")
+(frase "mamma" "caccia" "topi")
+(frase "bambine" "caccia" "topi")
+(frase "barattoli" "caccia" "topi")
+
+
+
+    
+      
+    

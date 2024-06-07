@@ -1,0 +1,35 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |[LABORATORIO]_7_Liste|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(define belong?  ;val: valore booleano
+  (lambda (x S)  ; x: numero intero, S: lista ordinata
+
+   (if (null? S)
+        #false
+        (if (= (car S) x)
+            #true
+            (belong? x (cdr S))  ; incrementa e analizza la lista senza il primo elemento
+            )
+        )
+    
+    ))
+
+(define position
+  (lambda (x S)    ; x: intero, S: lista
+
+    (if (null? S)
+        #false
+        (if (= (car S) x)
+            0
+            (+ 1 (position x (cdr S)))  ; incrementa e analizza la lista senza il primo elemento
+            )
+        )
+    ))
+
+(belong? 18 '())
+(belong? 18 '(5 7 10 18 23))
+(belong? 18 '(5 7 10 12 23))
+
+(position 7 '(7 8 24 35 41))
+(position 35 '(7 8 24 35 41)) 
+(position 41 '(7 8 24 35 41))

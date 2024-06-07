@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=Queens
+comment1.params=n
+comment1.target=int\ numeroDiSoluzioni(int)
+comment2.params=b
+comment2.target=int\ numeroDiCompletamenti(Board)
+numComments=3

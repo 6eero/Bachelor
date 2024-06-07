@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=TradDaScheme
+comment1.params=r\ h
+comment1.target=double\ supTotCil(double,\ double)
+comment1.text=\r\n\ (define\ sup-tot-cil\ \ ;\ val\:\ reale\r\n\ \ \ (lambda\ (r\ h)\ \ \ \ \ \ ;\ r,\ h\:\ reali\ positivi\r\n\ \ \ \r\n\ \ \ \ \ (*\ 2\ pi\ r\ (+\ r\ h))\r\n\ \ \ \ \ )\r\n\ \ \ )\r\n
+comment2.params=s
+comment2.target=java.lang.String\ pluraleSm(java.lang.String)
+comment2.text=\r\n\ (define\ plurale-sm\ \ ;\ val\:\ stringa\r\n\ \ \ (lambda\ (s)\ \ \ \ \ \ \ ;\ s\:\ stringa\r\n\ \ \ \r\n\ \ \ (string-append\ (substring\ s\ 0\ (-\ (string-length\ s)\ 1))\ "i")\r\n\ \ \ )\r\n\ )\r\n
+comment3.params=s
+comment3.target=boolean\ femminile(java.lang.String)
+comment3.text=\r\n\ (define\ femminile?\ \ ;\ val\:\ booleano\r\n\ \ \ (lambda\ (s)\ \ \ \ \ \ \ ;\ s\:\ stringa\r\n\r\n\ \ \ (char\=?\ (string-ref\ s\ (-\ (string-length\ s)\ 1))\ \#\\a)\r\n\ \ \ )\r\n\ )\r\n
+comment4.params=s
+comment4.target=java.lang.String\ plurale(java.lang.String)
+comment4.text=\r\n\ (define\ plurale\ \ ;\ val\:\ stringa\r\n\ (lambda\ (s)\r\n\ \r\n\ \ \ (if\ (femminile?\ s)\r\n\ \ \ \ \ \ \ (plurale-sf\ s)\r\n\ \ \ \ \ \ \ (plurale-sm\ s))\r\n\ \ \ \ ))\r\n
+comment5.params=k
+comment5.target=double\ s(int)
+comment5.text=\r\n\ (define\ s\ \ ;\ val\:\ reale\r\n\ (lambda\ (k);\ k\:\ numero\ naturale\r\n\ \r\n\ \ \ if\ (<\ k\ 2)\r\n\ \ \ (if\ (\=\ k\ 0)\ s0\ s1)\r\n\ \ \ (/\ (s\ (-\ k\ 2))\ 2)\r\n\ \ \ )\r\n\ ))\r\n\ \r\n\ (define\ s0\ (*\ 100\ (expt\ 2\ 1/4)))\r\n\ (define\ s1\ (*\ 100\ (expt\ 2\ -1/4)))\r\n
+comment6.params=btr
+comment6.target=int\ btrVal(java.lang.String)
+comment6.text=\r\n\ (define\ btr-val\r\n\ \ \ (lambda\ (btr)\r\n\ \ \ \r\n\ \ \ \r\n\ \r\n\ (define\ btd-val\r\n\ \ \ (lambda\ (btd)\r\n\ \ \ \ \ \r\n\ \ \ \ \ (cond\ ((char\=?\ btd\ \#\\-)\ -1)\r\n\ \ \ \ \ \ \ \ \ \ \ ((char\=?\ btd\ \#\\.)\ 0)\r\n\ \ \ \ \ \ \ \ \ \ \ ((char\=?\ btd\ \#\\+)\ +1)\r\n
+comment7.params=btd
+comment7.target=int\ btdVal(char)
+numComments=8

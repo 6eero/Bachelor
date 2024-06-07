@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=Board
+comment0.text=\r\n\ Rompicapo\ delle\ "n\ regine"\r\n\r\n\ Ultimo\ aggiornamento\:\ 23/05/2018\r\n\r\n\r\n\ Realizzazione\ del\ dato\ astratto\ "scacchiera"\r\n\ la\ cui\ configurazione\ eveolve\ aggiungendoe\ rimuovendo\ regine\r\n\r\n\ Protocollo\ della\ classe\ Board\:\r\n\r\n\ \ \ new\ Board(\ int\ n\ )\ \ \ \ \ \ \ \ \ \ \ \:\ \ costruttore\ (scacchiera\ vuota)\r\n\r\n\ \ \ size()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \:\ \ int\r\n\r\n\ \ \ queensOn()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \:\ \ int\r\n\r\n\ \ \ underAttack(\ int\ i,\ int\ j\ )\ \ \:\ \ boolean\r\n\r\n\ \ \ addQueen(\ int\ i,\ int\ j\ )\ \ \ \ \ \:\ \ void\r\n\r\n\ \ \ arrangement()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \:\ \ String\r\n\r\n\r\n\ Board\ b;\r\n\r\n\ \ \ new\ Board(n)\ \ \ \ \ \ \ \ \ \ \ costruttore\ della\ scacchiera\ n\ x\ n\ vuota;\r\n\ \ \ b.size()\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dimensione\ n\ della\ scacchiera\ b;\r\n\ \ \ b.queensOn()\ \ \ \ \ \ \ \ \ \ \ numero\ di\ regine\ collocate\ nella\ scacchiera\ b;\r\n\ \ \ b.underAttack(i,j)\ \ \ \ \ la\ posizione\ <i,j>\ e'\ minacciata?\r\n\ \ \ b.addQueen(i,j)\ \ \ \ \ \ \ \ modifica\ della\ configurazione\ di\ b\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ aggiungendo\ una\ nuova\ regina\ in\ posizione\ <i,j>\r\n\ \ \ b.removeQueen(i,j)\ \ \ \ \ modifica\ della\ configurazione\ di\ b\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rimuovendo\ la\ regina\ in\ posizione\ <i,j>\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (si\ assume\ che\ ci\ sia\ una\ regina\ in\ <i,j>)\r\n\ \ \ b.arrangement()\ \:\ \ \ \ \ \ descrizione\ "esterna"\ della\ configurazione\r\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (convenzioni\ scacchistiche).\r\n
+comment1.params=n
+comment1.target=Board(int)
+comment2.params=
+comment2.target=int\ size()
+comment3.params=
+comment3.target=int\ queensOn()
+comment4.params=i\ j
+comment4.target=boolean\ underAttack(int,\ int)
+comment5.params=i\ j
+comment5.target=void\ addQueen(int,\ int)
+comment6.params=i\ j
+comment6.target=void\ removeQueen(int,\ int)
+comment7.params=
+comment7.target=java.lang.String\ arrangement()
+comment8.params=
+comment8.target=java.lang.String\ toString()
+numComments=9

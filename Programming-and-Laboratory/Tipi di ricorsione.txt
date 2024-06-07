@@ -1,0 +1,4 @@
+coda -> non modifica nulla dopo la chiamata ricorsiva -> (count (- a 1))
+albero -> la funzione viene modificata anche dopo la chiamata ricorsiva -> (+ (count (- a 1)) 1)
+
+Stack<TIPO>

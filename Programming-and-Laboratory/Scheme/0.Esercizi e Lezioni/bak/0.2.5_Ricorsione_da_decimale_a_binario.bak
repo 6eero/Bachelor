@@ -1,0 +1,25 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 0.2.5_Ricorsione_da_decimale_a_binario) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; Rapprensentazione di un numero decimale in binario
+
+(define bin-rep ; val: rapprenentazione binaria
+  (lambda (n)   ; n: intero non negativo
+    
+    (if (< n 2)
+        (bit-rep n)      
+          
+          (string-append
+           (bin-rep (quotient  n 2))    
+           (bit-rep (remainder n 2))    
+           ))
+    ))
+  
+(define bit-rep 
+  (lambda (b)   
+    (if (= b 0)
+        "0"
+        "1")
+    ))
+
+(bin-rep 1234)

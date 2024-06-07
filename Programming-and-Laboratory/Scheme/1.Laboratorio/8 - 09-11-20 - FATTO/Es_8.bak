@@ -1,0 +1,103 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Es_8) (read-case-sensitive #t) (teachpacks ((lib "drawings.ss" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "drawings.ss" "installed-teachpacks")) #f)))
+
+;------------- CALCOLO AZIONI TORRE HANOI --------------------------------
+
+(define hanoi-moves ; val: lista di coppie
+  (lambda (n)       ; n > 0 intero
+    (hanoi-rec n 1 2 3)
+    ))
+
+(define hanoi-rec   ; val: lista di coppie
+  (lambda (n s d t) ; n intero, s, d, t: posizioni
+   (if (= n 1)
+       (list (list s d))
+       (let ((m1 (hanoi-rec (- n 1) s t d))
+             (m2 (hanoi-rec (- n 1) t d s))
+             )
+         (append m1 (cons (list s d) m2))
+         ))
+    ))
+
+;------------- ESEMPIO BASE ----------------------------------------------
+
+;(hanoi-moves 5)
+
+;-------------------------------------------------------------------------
+
+;------------- CALCOLO POSIZIONI TORRE HANOI -----------------------------
+
+(define hanoi-disks-calc
+  (lambda (n k s d t)
+    (if (= n 0)
+        (list (list 1 s)
+              (list 2 d)
+              (list 3 t))
+        (let ((val (expt 2 (- n 1))))                          
+          (if (>= k val)
+              (hanoi-disks-calc (- n 1) (- k val) s t d)
+              (hanoi-disks-calc (- n 1) k (+ s 1) d t)
+              )
+          )) 
+    ))
+
+(define hanoi-disks    ;val: list di coppie
+  (lambda (n k)        ;n: int  n > 0
+                       ;k: int  0 <= k <= 2^n - 1
+    (if (= k 0)
+        (list (list 1 n)
+              (list 2 0)
+              (list 3 0))
+        (hanoi-disks-calc n k 0 0 0)
+        )
+    ))
+
+;(hanoi-disks 3 0)
+;(hanoi-disks 3 1)
+;(hanoi-disks 3 2)
+;(hanoi-disks 3 3)
+;(hanoi-disks 3 4)
+;(hanoi-disks 3 5)
+;(hanoi-disks 3 6)
+;(hanoi-disks 3 7)
+;(hanoi-disks 5 13)
+
+;-------------------------------------------------------------------------
+
+;------------- IMMAGINE DISCHI TORRE HANOI -------------------------------
+
+(hanoi-picture      ;return: immagine
+ (lambda (n k)      ;n: int > 0
+                    ;k: int 0 <= k <= 2^(n-1)
+   (if (= k 0)
+       (towers-background n)
+       (let ((val (floor (- (expt 2 n) 1))))
+         (if (k > (floor (- (expt 2 n) 1)))
+             (above (disk-image n n 2 0) (hanoi-picture-calc n k val val))
+             (above (disk-image n n 1 0) (hanoi-picture-calc n k val val))
+             )))
+   ))
+
+(hanoi-picture-calc       ;return: immagine
+ (lambda (n k cur half)        ;n: int > 0
+                          ;k: int 0 <= k <= 2^(n-1)
+                          ;n; int 0 <= n <= 2^(n-1)
+                          ;v; int 0 <= v <= 2^(n-1)
+   (if (= k m)
+       (towers-background n)
+       (let ((cur-half (floor (/ half 2)
+             (current (if (>= k cur)
+                          (+ cur (floor (half / 2))))
+       (if (k > (- (- (expt 2 n) 1) (floor (- (expt 2 n) 1))))
+           (if
+           (above (disk-image m n 2 0) (hanoi-picture-calc n k n-1))
+           (above (disk-image n n 1 0) (hanoi-picture-calc n k n-1))
+           ))
+   ))
+
+   
+       
+           
+       
+       

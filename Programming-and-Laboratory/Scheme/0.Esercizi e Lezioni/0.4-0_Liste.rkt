@@ -1,0 +1,47 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname 0.4_Liste) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+;; Liste: sequenze di elementi che possono essere anche tutti diversi
+
+;; Procedura list-ref
+
+(define lista-ref
+  (lambda (u i)
+    
+    (if (= i u)
+        (car u)
+        (lista-ref (cdr u)(- i 1))
+        )
+    ))
+
+
+;; Procedura append
+
+(define appendi
+  (lambda (u v)
+    
+    (if (null? u)
+        v
+        (cons (car u)(appendi (cdr u) v))
+        )
+    ))
+
+;; Procedura reverse
+
+(define rovescia
+  (lambda (u)
+
+    (if (null? u)
+        null
+        (appendi (rovescia (cdr u)) (cons (car u) null))
+        )
+    ))
+
+(define rovotti
+  (lambda (u v) ;; gli elementi di u li voglio rovesciare in v
+
+    (if (null? u)
+        v                                              ;ho spsotato tutti gli elementi rovesciandoli in v
+        (rovotti (cdr u) (cons (car u) v))
+        )
+    ))

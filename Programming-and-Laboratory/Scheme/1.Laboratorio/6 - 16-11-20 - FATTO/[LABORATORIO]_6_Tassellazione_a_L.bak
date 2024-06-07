@@ -1,0 +1,48 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |[LABORATORIO]_6_Tassellazione_a_L|) (read-case-sensitive #t) (teachpacks ((lib "drawings.ss" "installed-teachpacks"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "drawings.ss" "installed-teachpacks")) #f)))
+(set-tessellation-shift-step!)
+
+(define L-tessellation
+  (lambda (n)
+
+    ; Casi base 
+    (cond ((= n 1) L-tile) 
+          ((= n 2) (glue-tiles
+                    (glue-tiles
+                     (glue-tiles
+                      L-tile
+                      (shift-right (quarter-turn-right L-tile) n))
+                     (shift-down (quarter-turn-left L-tile) n))
+                    (shift-down (shift-right L-tile (- n 1)) (- n 1))))
+          
+          ; Casi ricorsivi  
+          (else (glue-tiles
+                 (glue-tiles
+                  (glue-tiles
+                   (L-tessellation (/ n 2))
+                   (shift-right (quarter-turn-right (L-tessellation (/ n 2))) n))
+                  (shift-down (quarter-turn-left (L-tessellation (/ n 2))) n))
+                 (shift-down (shift-right (L-tessellation (/ n 2)) (/ n 2)) (/ n 2))) 
+                )
+          )  
+    ))
+
+
+(L-tessellation 1)
+;(L-tessellation 2)
+;(L-tessellation 4)
+;(L-tessellation 8)
+;(L-tessellation 16)
+
+
+
+
+
+
+
+
+
+
+
+
