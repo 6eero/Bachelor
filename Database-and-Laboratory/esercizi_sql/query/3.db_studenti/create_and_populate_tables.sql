@@ -36,7 +36,8 @@ VALUES
     ('Studente_5', 'Anna', 'Neri', 2000),
     ('Studente_6', 'Maurizio', 'Gialli', 2003),
     ('Studente_7', 'Patrick', 'Spopovich', 1997),
-    ('Studente_8', 'Matteo', 'Sasso', 1989);
+    ('Studente_8', 'Matteo', 'Sasso', 1989),
+    ('Studente_9', 'Jack', 'Rose', 1919);
 
 -- Popolazione della tabella Insegnamenti
 INSERT INTO Insegnamenti (Codice, Materia, Docente, AnnoDiCorso)
@@ -75,5 +76,9 @@ VALUES
     ('Studente_6', 5, 2021, 21),
 
     ('Studente_7', 1, 2021, 18),
-    ('Studente_7', 2, 2021, 18);
+    ('Studente_7', 2, 2021, 18),
 
+    ('Studente_8', 3, 2021, 18),
+    ('Studente_8', 5, 2021, 18),
+
+    ('Studente_9', 5, 2021, 18);
