@@ -24,8 +24,10 @@ $$
 
         if numero_di_opere_nella_sala >= capacita_massima_sala
         then 
-            raise exception 'La sala è piena';
-            return null;
+            raise notice 'La sala è piena, metto il reperto % nel magazziono.', new.codice;
+            -- return null;
+            new.collocazione := 100; -- inserisce il reperto nel magazzino
+            return new;
         else
             raise notice 'numero_di_opere_nella_sala %: %', new.collocazione, numero_di_opere_nella_sala + 1;
             return new;
