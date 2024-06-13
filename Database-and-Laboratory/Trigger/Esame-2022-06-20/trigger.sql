@@ -14,9 +14,7 @@ Quali operazioni, e su quali tabelle, possono violare tale requisito? Si motivi 
 (6) cancellazione in referenti: da problemi nel caso in cui venga cancellato un referente che ha un
                                 progetto nello stato 'attivo'.
 
-Si scelga una delle operazioni individuate e si scriva un trigger SQL che eviti la violazione. 
-Infine, si illustrino brevemente due differenze tra un controllo dei vincoli mediante la clausola CHECK, 
-in combinazione con user-defined function, e mediante trigger.*/
+Si scelga una delle operazioni individuate e si scriva un trigger SQL che eviti la violazione.*/
 
 -- Trigger 1: per evitare la violazione del vincolo durante inserimento in progetti.
 create or replace function check_stato()
@@ -105,3 +103,34 @@ create trigger verifica_cancellazione_referente
     execute procedure check_cancellazione();
 
 delete from Referenti where matricola = 1111; -- no perche 1111 ha progetti nello stato attivo
+
+/*Si illustrino brevemente due differenze tra un controllo dei vincoli mediante la clausola CHECK, in combinazione con 
+user-defined function, e mediante trigger.
+
+(1) Momento di esecuzione:
+
+    -   Il vincolo definito con la clausola CHECK e una user-defined function viene valutato durante l'inserimento o 
+        l'aggiornamento dei dati nella tabella. La funzione è chiamata direttamente durante l'operazione di inserimento 
+        o aggiornamento dei dati per verificare se la condizione specificata è rispettata.
+
+    -   Un trigger è un oggetto del database che viene attivato in risposta a eventi specifici (come un'operazione di 
+        inserimento, aggiornamento o cancellazione). Un trigger può includere un controllo sui vincoli, e può essere 
+        configurato per essere eseguito prima dell'operazione (BEFORE) o dopo l'operazione (AFTER). Quindi, un trigger 
+        può controllare i vincoli in momenti diversi rispetto a quando viene utilizzata una clausola CHECK con una 
+        funzione definita dall'utente.
+
+(2) Complessità e flessibilità:
+
+    -   Clausola CHECK con user-defined function: È più semplice e diretto definire un vincolo utilizzando una clausola 
+        CHECK con una funzione definita dall'utente. Questo approccio è utile quando la condizione da verificare è 
+        relativamente semplice o standard.
+
+    -   Trigger: I trigger offrono maggiore flessibilità in termini di logica di controllo. Possono essere utilizzati 
+        per implementare controlli più complessi che potrebbero coinvolgere più tabelle o richiedere azioni aggiuntive 
+        oltre alla semplice validazione dei dati. Ad esempio, un trigger può essere utilizzato per aggiornare altre 
+        tabelle o inviare notifiche in base alle operazioni eseguite.
+
+In sintesi, mentre entrambi possono essere utilizzati per implementare controlli sui vincoli, la scelta tra l'uso di una 
+clausola CHECK con una funzione definita dall'utente e l'utilizzo di un trigger dipende dalla complessità delle regole di
+controllo, dal momento in cui devono essere eseguite e dalle azioni aggiuntive richieste.
+*/
