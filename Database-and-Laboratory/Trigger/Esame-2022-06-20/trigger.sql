@@ -74,3 +74,34 @@ create trigger verifica_aggiornamento_stato
 
 update Progetti set stato = 'attivo' where codice = '1aaa1'; -- ok perche ha un referente
 update Progetti set stato = 'attivo' where codice = '4ddd4'; -- no perche non ha un referente
+
+
+
+
+-- Trigger 3: per evitare la violazione del vincolo durante acancellazione in referenti.
+create or replace function check_cancellazione()
+returns trigger
+language plpgsql as
+$$
+    begin
+        perform *
+        from progetti
+        where referente = old.matricola
+        and stato = 'attivo';
+
+        if found
+        then
+            raise exception 'Errore: il referente che si sta cercando di eliminare ha un progetto nello stato attivo';
+            return null;
+        else
+            return old;
+        end if;
+    end;
+$$;
+
+create trigger verifica_cancellazione_referente
+    before delete on Referenti
+    for each row
+    execute procedure check_cancellazione();
+
+delete from Referenti where matricola = 1111; -- no perche 1111 ha progetti nello stato attivo
