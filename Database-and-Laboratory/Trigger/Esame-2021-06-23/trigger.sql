@@ -1,9 +1,9 @@
-/*Si consideri il seguente vincolo: un esopianeta non puo orbitare attorno ad una stella che e' una supergigante
+/*Si consideri il seguente vincolo: un esopianeta non puo orbitare attorno ad una stella che e' una nana
 rossa. Quali operazioni, e su quali tabelle, possono violare questo vincolo? Si scelga una di queste operazioni 
 e si scriva un trigger SQL che eviti tale violazione.
 
-(1) inserimento in Esopianeti: nel caso in cui venga inserito un esopianeta con nome = stella.
-(2) aggiornamento in Esopianeti: nel caso in cui venga aggiornato un esopianeta con nome = stella.
+(1) inserimento in Esopianeti: nel caso in cui venga inserito un esopianeta che orbita attorno una stella che e' nana rossa.
+(2) aggiornamento in Esopianeti: nel caso in cui venga aggiornato un esopianeta impostando che orbiti attorno una stella che e' nana rossa.
 (3) cancellazione in Esopianeti: non da problemi.
 
 (1) inserimento in Stelle: non da problemi
@@ -12,12 +12,20 @@ e si scriva un trigger SQL che eviti tale violazione.
 
 */
 
+-- Trigger per gestire inserimento in Esopianeti
 create or replace function valida_inserimento()
 returns trigger
 language plpgsql as
 $$
+    declare
+        new_stella_alla_quale_orbita varchar(50);
+
     begin
-        if new.nome = new.stella_alla_quale_orbita
+        select classificazione into new_stella_alla_quale_orbita
+        from stelle 
+        where nome = new.stella_alla_quale_orbita;
+
+        if new_stella_alla_quale_orbita = 'nana rossa'
         then
             raise exception 'Errore';
             return null;
@@ -32,8 +40,8 @@ create trigger verifica_inserimento
     for each row
     execute procedure valida_inserimento();
 
-insert into Stelle(nome, classificazione) values
-    ('sus', 'nana gialla');
+insert into Esopianeti(nome, stella_alla_quale_orbita, ESI, distanza_dalla_terra) values    -- fallisce
+    ('Esoos t2', 'teegarden', 0.23, 16);
 
-insert into Esopianeti(nome, stella_alla_quale_orbita, ESI, distanza_dalla_terra) values
-    ('sus', 'sus', 0.23, 16);
+insert into Esopianeti(nome, stella_alla_quale_orbita, ESI, distanza_dalla_terra) values    -- ok
+    ('Esoos t1', 'antares', 0.23, 16);
