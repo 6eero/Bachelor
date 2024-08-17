@@ -21,6 +21,8 @@ sqrt $ abs (-16)
 [1..1000] !! 453 -- 454
 ~~~
 
+## Funzioni
+
 #### Funzione `map`
 `Map` restituisce una lista in cui ogni elemento è il risultato dell'applicazione della funzione passata come input all'elemento corrispondente nell'elenco di input.
 
