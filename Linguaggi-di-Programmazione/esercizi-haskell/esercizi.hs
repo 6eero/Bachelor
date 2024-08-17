@@ -13,6 +13,11 @@ binomial 0 k = 0
 binomial n k = factorial n `div` (factorial k * factorial (n - k))
 
 
+-- 1.3 Si scriva una funzione che calcoli una lista con tutte le combinazioni su n elementi. Si usi opportunamente map :: ( a -> b ) -> [ a ] -> [ b ]
+calculateList :: Int -> [a] -> [[a]]
+calculateList 0 _  = [[]]
+calculateList _ [] = [] 
+calculateList n (x:xs) = map (x:) (calculateList (n-1) xs) ++ calculateList n xs
 
 {----------------------------------------x LISTE x----------------------------------------}
 
