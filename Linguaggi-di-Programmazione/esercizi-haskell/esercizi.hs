@@ -77,3 +77,14 @@ Scrivere una funzione che costruisce, a partire da una lista di numeri interi, u
 getPairs :: [Int] -> [(Int, Int)]
 getPairs [] = []
 getPairs (x:xs) = (x, sum xs) : getPairs xs
+
+{----------------------------------------x MATRICI x----------------------------------------}
+
+-- 3.1 Si scriva una funzione matrixDim che data una matrice ne calcola le dimensioni, se la matrice e' ben formata, altrimenti restituisce (-1,-1).
+matrixDim :: [[a]] -> (Int, Int)
+matrixDim [] = (0, 0) 
+matrixDim (x:xs)  
+    | all (\row -> length row == length x) xs = (1 + length xs, length x)
+    | otherwise = (-1, -1)
+
+-- a
