@@ -1,6 +1,8 @@
 # Appunti Haskell
 
-## Composizione di funzioni `$`
+## Operatori
+
+#### Operatore di composizione di funzioni `$`
 `$` esegue la funzione alla sua destra e da il suo risultato come input alla funzione a lla sua sinistra
 
 ~~~ haskell
@@ -11,7 +13,15 @@ take 2 $ quicksort $ filter odd [2, 4, 6, 8]
 sqrt $ abs (-16)
 ~~~
 
-## Funzione `map`
+#### Operatore di accesso per indice `!!`
+`!!` data una lista ed un valore, restituisce l'elemento della lista la cui posizione è la stessa del numero.
+
+~~~ haskell
+[1,2,3,4] !! 0 -- 1
+[1..1000] !! 453 -- 454
+~~~
+
+#### Funzione `map`
 `Map` restituisce una lista in cui ogni elemento è il risultato dell'applicazione della funzione passata come input all'elemento corrispondente nell'elenco di input.
 
 ~~~ haskell
@@ -20,7 +30,7 @@ map (\x -> even x) [2, 4, 6, 8] -- [True,True,True,True]
 map ceiling $ map sqrt [10, 30, 60] -- [4,6,8]
 ~~~
 
-## Funzione `all`
+#### Funzione `all`
 `All` è una funzione standard in Haskell che prende in input una funzione e una lista, e verifica se la funzione restituisce True per ogni elemento della lista (scorre la lista e assegna ad x il valore in test). 
 
 ~~~ haskell
@@ -28,15 +38,17 @@ all (\x -> even x) [2, 4, 6, 8] -- true
 all (\x -> even x) [2, 3, 6, 8] -- false
 ~~~
 
-## Funzione `filter`
-`All` è una funzione standard in Haskell che prende in input una funzione e una lista, e verifica se la funzione restituisce True per ogni elemento della lista (scorre la lista e assegna ad x il valore in test). 
+#### Funzione `filter`
+`filter` applicato a un predicato e a una lista, restituisce una lista contenente tutti gli elementi della lista di input che soddisfano il predicato.. 
 
 ~~~ haskell
-all (\x -> even x) [2, 4, 6, 8] -- true
-all (\x -> even x) [2, 3, 6, 8] -- false
+filter (\x -> even x) [1,2,3,4,5] -- [2,4]
+
+-- ritorna le coppie in cui il primo elemento è minore del secondo
+filter (\lst -> (lst !! 0 < lst !! 1)) [[1,2],[3,2],[5,9]] -- [[1,2],[5,9]]
 ~~~
 
-## Funzione `zip`
+#### Funzione `zip`
 `Zip` applicato a due liste, restituisce una lista di coppie formate tuplando insieme gli elementi corrispondenti delle liste date. Se le due liste sono di lunghezza diversa, la lunghezza della lista risultante è quella della più corta. 
 
 ~~~ haskell
