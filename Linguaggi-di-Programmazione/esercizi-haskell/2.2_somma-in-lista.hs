@@ -1,4 +1,5 @@
--- Scrivere una funzione che calcola la somma degli elementi di posizione dispari di una lista
+-- Scrivere una funzione che calcola la somma degli elementi di posizione 
+-- dispari di una lista
 
 -- versione 1:
 sumOddPosition :: [Int] -> Int
