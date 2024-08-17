@@ -10,3 +10,4 @@ quicksort (pivot:xs) =  quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quicks
 
 minOdd :: [Int] -> [Int]
 minOdd xs = take 2 $ quicksort $ filter odd xs
+-- minOdd xs = (take 2 . quicksort . filter odd) xs -- alternativamente
