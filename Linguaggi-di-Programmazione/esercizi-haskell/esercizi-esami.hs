@@ -61,3 +61,30 @@ fixListPairs = map fixPair
 orderPairList :: [(Int, Int)] -> [(Int, Int)]
 orderPairList [] = []
 orderPairList xs = sort xs
+
+
+{----------------------------------------x 4 luglio 2022 x----------------------------------------}
+
+-- Scrivere le seguenti funzioni in Haskell:
+
+--una funzione che, dati un lista e un suo possibile elemento, determina se l’elemento appartiene alla lista;
+containsElement :: [Int] -> Int -> Bool
+containsElement [] _ = False
+containsElement (x:xs) n =
+  (x == n) || containsElement xs n
+
+-- una funzione che, dati un lista e un suo elemento, restituisce la lista originale senza l’elemento;
+removeElement :: [Int] -> Int -> [Int]
+removeElement [] _ = []
+removeElement xs n = filter (/= n) xs
+
+-- usando le due funzioni precedenti, definire una funzione che date due liste determina se una e' la permutazione dell’altra;
+checkPermutation :: [Int] -> [Int] -> Bool
+checkPermutation [] _ = False
+checkPermutation _ [] = False
+checkPermutation [a] [b] = a == b
+checkPermutation (x:xs) ls =
+  containsElement ls x && checkPermutation xs (removeElement ls x)
+
+
+-- una funzione che data una matrice, memorizzata per righe, determina se le righe della matrice sono le sono tutte permutazioni di una stessa lista

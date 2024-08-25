@@ -52,6 +52,7 @@ all (\x -> even x) [2, 3, 6, 8] -- false
 
 ~~~ haskell
 filter (\x -> even x) [1,2,3,4,5] -- [2,4]
+filter (/= 3) [1..4] -- [1,2,4]
 
 -- ritorna le coppie in cui il primo elemento è minore del secondo
 filter (\lst -> (lst !! 0 < lst !! 1)) [[1,2],[3,2],[5,9]] -- [[1,2],[5,9]]
