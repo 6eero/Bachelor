@@ -86,5 +86,7 @@ checkPermutation [a] [b] = a == b
 checkPermutation (x:xs) ls =
   containsElement ls x && checkPermutation xs (removeElement ls x)
 
-
 -- una funzione che data una matrice, memorizzata per righe, determina se le righe della matrice sono le sono tutte permutazioni di una stessa lista
+checkRows :: [[Int]] -> Bool  --[[1,2,3], [2,1,3], [3,2,1]]
+checkRows [] = True
+checkRows (x:xs) = all (checkPermutation x) xs
