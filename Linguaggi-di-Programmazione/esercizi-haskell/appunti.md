@@ -56,3 +56,27 @@ filter (\lst -> (lst !! 0 < lst !! 1)) [[1,2],[3,2],[5,9]] -- [[1,2],[5,9]]
 ~~~ haskell
 zip [1..6] "abcd" -- [(1,'a'),(2,'b'),(3,'c'),(4,'d')]
 ~~~
+
+#### Funzione `zipWith`
+`zipWith` applicato ad una funzione binaria e a due liste, restituisce una lista contenente elementi formati applicando la funzione ai corrispettivi elementi nelle liste. 
+
+~~~ haskell
+zipWith (+) [1,2,3] [4,5,6] -- [5,7,9]
+zipWith (\x y -> x == y) [1,2,3] [1,2,3] --[True,True,True]
+~~~
+
+#### Funzione `foldr`
+`foldr` prende tre input:
+1. una funzone bianria
+2. un valore iniziale
+3. una lista
+
+La funzione `foldr` applica la funzione passata come input al al valore iniziale e al primo elemento della lista, poi applica il risultato dell'operazione all'elemento successivo, e così via fino alla fine della lista.
+
+~~~ haskell
+-- Esegue l'or di tutti gli elementi della lista, partendo da un booleano falso
+foldr (||) False [True,False,False] --True
+
+-- Somma tutti gli elementi di una lista
+foldr (+) 0 [1..5] -- 15
+~~~

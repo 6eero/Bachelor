@@ -1,11 +1,23 @@
-import Data.List
--- 4 luglio 2022
--- Su liste aventi come elementi coppie di valori di uno stesso tipo ordinabile, scrivere le seguenti funzioni Haskell:
+-- 12 settembre 2022 - Si scrivano le seguenti funzioni Haskell:
 
--- una funzione che data una lista restituisce la lista contenente le sole coppie ordinate (il primo elemento della coppia e' minore del secondo);
+-- una funzione che date due liste determina se una delle due e' una sottolista dell’altra; => per ogni elemento della prima lista lo cerco nella seconda
+isSublist :: (Eq a) => [a] -> [a] -> Bool
+isSublist _ [] = False
+isSublist sub lst@(x:xs)
+  | sub `isPrefixOf` lst = True
+  | otherwise = sub `isPrefixOf` xs
+  where
+    isPrefixOf [] _ = True
+    isPrefixOf _ [] = False
+    isPrefixOf (p:ps) (l:ls) =
+      (p == l) && isPrefixOf ps ls
 
+-- una funzione che data una lista determina se questa e' palindroma;
+isPalyndrome :: [Int] -> Bool
+isPalyndrome [] = True
+isPalyndrome [x] = True
+isPalyndrome (x:xs) =
+  (x == last xs) && isPalyndrome (init xs)
 
--- una funzione che data una lista di coppie le ordina, ossia scambia tra loro gli elementi di una coppie in modo che il primo sia minore del secondo;
-
-
--- considerando l’ordine lessicografico tra le coppie, definire una funzione che data una lista di coppie la ordina.
+-- una funzione che data una lista determina la lunghezza della piu' lunga sottolista finale palindroma;
+-- una funzione che data una lista determina la lunghezza della piu' lunga sottolista palindroma.
