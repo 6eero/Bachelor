@@ -30,6 +30,13 @@ sqrt $ abs (-16)
 map (*3) [1..5] -- [3,6,9,12,15]
 map (\x -> even x) [2, 4, 6, 8] -- [True,True,True,True]
 map ceiling $ map sqrt [10, 30, 60] -- [4,6,8]
+
+-- fixPair prende una coppia e la ritorna ordinata
+fixPair :: (Int, Int) -> (Int, Int)
+fixPair (a, b) = if a > b then (b, a) else (a, b)
+-- uso fixPair su ogni elemento di una lista di coppie per tornare una lista di coppie ordinate
+fixListPairs :: [(Int, Int)] -> [(Int, Int)]
+fixListPairs = map fixPair
 ~~~
 
 #### Funzione `all`
@@ -67,7 +74,7 @@ zipWith (\x y -> x == y) [1,2,3] [1,2,3] --[True,True,True]
 
 #### Funzione `foldr`
 `foldr` prende tre input:
-1. una funzone bianria
+1. una funzone binaria
 2. un valore iniziale
 3. una lista
 
