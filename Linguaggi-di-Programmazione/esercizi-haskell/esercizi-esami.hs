@@ -3,7 +3,8 @@ import Data.List (sort)
 
 -- Si scrivano le seguenti funzioni Haskell:
 
--- 1. una funzione che date due liste determina se una delle due e' una sottolista dell’altra; => per ogni elemento della prima lista lo cerco nella seconda
+-- 1. una funzione che date due liste determina se una delle due e' una sottolista dell’altra; => per ogni elemento 
+-- della prima lista lo cerco nella seconda
 isSublist :: (Eq a) => [a] -> [a] -> Bool
 isSublist _ [] = False
 isSublist sub lst@(x:xs)
@@ -38,11 +39,13 @@ getLenOfTheLastPalyndrome (x:xs) =
 
 -- Su liste aventi come elementi coppie di valori di uno stesso tipo ordinabile, scrivere le seguenti funzioni Haskell:
 
--- 1. una funzione che data una lista restituisce la lista contenente le sole coppie ordinate (il primo elemento della coppia `e minore del secondo);
+-- 1. una funzione che data una lista restituisce la lista contenente le sole coppie ordinate (il primo elemento della 
+-- coppia `e minore del secondo);
 getOrderedPairs :: [[Int]] -> [[Int]]
 getOrderedPairs = filter (\lst -> head lst < lst !! 1)
 
--- 2. una funzione che data una lista di coppie le ordina, ossia scambia tra loro gli elementi di una coppie in modo che il primo sia minore del secondo;
+-- 2. una funzione che data una lista di coppie le ordina, ossia scambia tra loro gli elementi di una coppie in modo che 
+-- il primo sia minore del secondo;
 fixPair :: (Int, Int) -> (Int, Int)
 fixPair (a, b) =
   if a > b
@@ -78,7 +81,8 @@ removeElement :: [Int] -> Int -> [Int]
 removeElement [] _ = []
 removeElement xs n = filter (/= n) xs
 
--- 3. usando le due funzioni precedenti, definire una funzione che date due liste determina se una e' la permutazione dell’altra;
+-- 3. usando le due funzioni precedenti, definire una funzione che date due liste determina se una e' la permutazione 
+-- dell’altra;
 checkPermutation :: [Int] -> [Int] -> Bool
 checkPermutation [] _ = False
 checkPermutation _ [] = False
@@ -86,7 +90,57 @@ checkPermutation [a] [b] = a == b
 checkPermutation (x:xs) ls =
   containsElement ls x && checkPermutation xs (removeElement ls x)
 
--- 4. una funzione che data una matrice, memorizzata per righe, determina se le righe della matrice sono le sono tutte permutazioni di una stessa lista
+-- 4. una funzione che data una matrice, memorizzata per righe, determina se le righe della matrice sono le sono 
+-- tutte permutazioni di una stessa lista
 checkRows :: [[Int]] -> Bool  --[[1,2,3], [2,1,3], [3,2,1]]
 checkRows [] = True
 checkRows (x:xs) = all (checkPermutation x) xs
+
+
+{----------------------------------------x 9 settembre 2019 x----------------------------------------}
+
+-- Si scriva una funzione Haskell che, prese in ingresso due liste strettamente ordinate xs e ys, costruisca una 
+-- terza lista strettamente ordinata contenente tutti gli elementi che appaiono in almeno una delle due le liste 
+-- xs e ys. Si rispetti percio il vincolo che se un elemento appare sia in xs che in ys, allora deve apparire 
+-- un’unica volta nella lista risultato.
+mergeAndOrderLists :: [Int] -> [Int] -> [Int]
+mergeAndOrderLists [] ys = quicksort ys
+mergeAndOrderLists xs [] = quicksort xs
+mergeAndOrderLists (x:xs) ys =
+  if containsElement ys x
+    then mergeAndOrderLists xs ys
+    else mergeAndOrderLists xs (ys ++ [x])
+
+quicksort :: [Int] -> [Int]
+quicksort [] = []
+quicksort [x] = [x]
+quicksort (pivot:xs) =  quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quicksort [x | x <- xs, x > pivot]
+
+-- Si scriva inoltre una funzione Haskell che, presa in ingresso una matrice memorizzata per righe, in cui ogni 
+-- riga e' strettamente ordinata, costruisca una lista strettamente ordinata contenente tutti gli elementi che 
+-- appaiono in almeno una riga della matrice.
+mergeAndOrderMatrix :: [[Int]] -> [Int]
+mergeAndOrderMatrix [] = []
+mergeAndOrderMatrix xs = foldr mergeAndOrderLists [] xs
+
+
+{----------------------------------------x 2 luglio 2019 x----------------------------------------}
+
+-- Si scriva una funzione Haskell che, presa in ingresso una matrice quadrata, memorizzata per righe,
+-- restituisca in uscita la sottomatrice ottenuta eliminando la prima riga e la prima colonna alla matrice
+-- originaria. 
+removeRows :: [[Int]] -> [[Int]]
+removeRows [] = []
+removeRows (x:xs) = init xs
+
+-- Si scriva inoltre una funzione Haskell che, preso in ingresso una matrice quadrata, memoriz-
+-- zata per righe, restituisca la lista degli elementi contenuti nella diagonale della matrice. Si commenti
+-- il codice e si definisca il tipo di ogni funzione definita.
+getDiagonal :: [[Int]] -> [Int]
+getDiagonal [] = []
+getDiagonal xs = getDiagonalHelper xs 0
+  where
+    getDiagonalHelper :: [[Int]] -> Int -> [Int]
+    getDiagonalHelper [] _ = []
+    getDiagonalHelper (x:xs) pos = (x !! pos) : getDiagonalHelper xs (pos + 1)
+

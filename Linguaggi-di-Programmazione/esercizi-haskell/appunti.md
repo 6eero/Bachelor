@@ -88,3 +88,36 @@ foldr (||) False [True,False,False] --True
 -- Somma tutti gli elementi di una lista
 foldr (+) 0 [1..5] -- 15
 ~~~
+
+#### Funzione `tail`
+`tail` applicata ad una lista, la ritorna senza il primo elemento
+
+~~~ haskell
+tail [1,2,3] --[2,3]
+~~~
+
+## Funzioni che potrebbero tornare utili
+
+### `containsElement` 
+- Input: una `lista` e un `valore`
+- Output: `True` se la lista contine il valore, `False` altrimenti
+
+~~~ haskell
+containsElement :: [Int] -> Int -> Bool
+containsElement [] _ = False
+containsElement (x:xs) n = (x == n) || containsElement xs n
+  ~~~ 
+
+### `quickSort` 
+- Input: una `lista` 
+- Output: la `lista` ordinata
+
+~~~ haskell
+quicksort :: [Int] -> [Int]
+quicksort [] = []
+quicksort [x] = [x]
+quicksort (pivot:xs) =  
+  quicksort [x | x <- xs, x <= pivot] ++ 
+  [pivot] ++ 
+  quicksort [x | x <- xs, x > pivot]
+  ~~~ 
