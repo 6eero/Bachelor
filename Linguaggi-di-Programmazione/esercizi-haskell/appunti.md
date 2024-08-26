@@ -121,3 +121,13 @@ quicksort (pivot:xs) =
   [pivot] ++ 
   quicksort [x | x <- xs, x > pivot]
   ~~~ 
+
+### `transpose` 
+- **Input**: una `matrice` 
+- **Output**: la `matrice` transposta
+
+~~~ haskell
+transpose :: [[a]] -> [[a]]
+transpose ([]:_) = []
+transpose x = map head x : transpose (map tail x)
+  ~~~ 

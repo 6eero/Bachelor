@@ -91,3 +91,7 @@ transpose x = map head x : transpose (map tail x)
 isSymmetric :: Eq a => [[a]] -> Bool
 isSymmetric [] = True
 isSymmetric x = x == transpose x
+
+
+
+{----------------------------------------x BST x----------------------------------------}
