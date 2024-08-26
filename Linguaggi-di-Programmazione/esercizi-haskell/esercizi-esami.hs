@@ -1,6 +1,5 @@
 import Data.List (sort)
 {----------------------------------------x 12 settembre 2022 x----------------------------------------}
-
 -- Si scrivano le seguenti funzioni Haskell:
 
 -- 1. una funzione che date due liste determina se una delle due e' una sottolista dell’altra; => per ogni elemento 
@@ -36,7 +35,6 @@ getLenOfTheLastPalyndrome (x:xs) =
 
 
 {----------------------------------------x 4 luglio 2022 x----------------------------------------}
-
 -- Su liste aventi come elementi coppie di valori di uno stesso tipo ordinabile, scrivere le seguenti funzioni Haskell:
 
 -- 1. una funzione che data una lista restituisce la lista contenente le sole coppie ordinate (il primo elemento della 
@@ -67,7 +65,6 @@ orderPairList xs = sort xs
 
 
 {----------------------------------------x 4 luglio 2022 x----------------------------------------}
-
 -- Scrivere le seguenti funzioni in Haskell:
 
 -- 1. una funzione che, dati un lista e un suo possibile elemento, determina se l’elemento appartiene alla lista;
@@ -98,7 +95,6 @@ checkRows (x:xs) = all (checkPermutation x) xs
 
 
 {----------------------------------------x 9 settembre 2019 x----------------------------------------}
-
 -- Si scriva una funzione Haskell che, prese in ingresso due liste strettamente ordinate xs e ys, costruisca una 
 -- terza lista strettamente ordinata contenente tutti gli elementi che appaiono in almeno una delle due le liste 
 -- xs e ys. Si rispetti percio il vincolo che se un elemento appare sia in xs che in ys, allora deve apparire 
@@ -125,7 +121,6 @@ mergeAndOrderMatrix xs = foldr mergeAndOrderLists [] xs
 
 
 {----------------------------------------x 2 luglio 2019 x----------------------------------------}
-
 -- Si scriva una funzione Haskell che, presa in ingresso una matrice quadrata, memorizzata per righe,
 -- restituisca in uscita la sottomatrice ottenuta eliminando la prima riga e la prima colonna alla matrice
 -- originaria. 
@@ -143,4 +138,3 @@ getDiagonal xs = getDiagonalHelper xs 0
     getDiagonalHelper :: [[Int]] -> Int -> [Int]
     getDiagonalHelper [] _ = []
     getDiagonalHelper (x:xs) pos = (x !! pos) : getDiagonalHelper xs (pos + 1)
-

@@ -99,8 +99,8 @@ tail [1,2,3] --[2,3]
 ## Funzioni che potrebbero tornare utili
 
 ### `containsElement` 
-- Input: una `lista` e un `valore`
-- Output: `True` se la lista contine il valore, `False` altrimenti
+- **Input**: una `lista` e un `valore`
+- **Output**: `True` se la lista contine il valore, `False` altrimenti
 
 ~~~ haskell
 containsElement :: [Int] -> Int -> Bool
@@ -109,8 +109,8 @@ containsElement (x:xs) n = (x == n) || containsElement xs n
   ~~~ 
 
 ### `quickSort` 
-- Input: una `lista` 
-- Output: la `lista` ordinata
+- **Input**: una `lista` 
+- **Output**: la `lista` ordinata
 
 ~~~ haskell
 quicksort :: [Int] -> [Int]
