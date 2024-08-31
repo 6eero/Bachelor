@@ -131,3 +131,14 @@ transpose :: [[a]] -> [[a]]
 transpose ([]:_) = []
 transpose x = map head x : transpose (map tail x)
   ~~~ 
+
+### `areAllEqual` 
+- **Input**: una `lista` 
+- **Output**: `true` se i suoi elementi sono tutti uguali `false` altrimenti
+
+~~~ haskell
+-- prende una lista di interi e controlla se sono tutti uguali
+areAllEqual :: Eq a => [a] -> Bool
+areAllEqual [] = True
+areAllEqual (x:xs) = all (== x) xs
+  ~~~ 

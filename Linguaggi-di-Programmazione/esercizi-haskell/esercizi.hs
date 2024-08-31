@@ -79,7 +79,7 @@ colsums [] = []
 colsums (x:xs) = foldr addLists x xs
 
 addLists :: [Int] -> [Int] -> [Int]
-addLists = zipWith (+) 
+addLists = zipWith (+)
 
 -- 3.9 Si scriva una funzione che data una matrice di dimensioni m × n restituisce la corrispondente
 -- matrice trasposta (di dimensioni n × m).
@@ -95,3 +95,35 @@ isSymmetric x = x == transpose x
 
 
 {----------------------------------------x BST x----------------------------------------}
+data Tree a = Void | Node {
+    val :: a,
+    left :: Tree a,
+    right :: Tree a
+} deriving (Eq, Ord, Read, Show)
+
+-- 1. Scrivere una funzione che calcola la somma dei valori di un albero a valori sommabili
+getSumTree :: Num a => Tree a -> a
+getSumTree Void = 0
+getSumTree (Node val left right) = val + getSumTree left + getSumTree right
+
+-- 2. Scrivere una funzione che calcola la somma dei valori dispari di un albero a valori sommabili su cui
+-- sia utilizzabile la funzione odd.
+getOddSumTree :: (Num a, Integral a) => Tree a -> a
+getOddSumTree Void = 0
+getOddSumTree (Node val left right) =
+    (if odd val then val else 0) + getOddSumTree left + getOddSumTree right
+
+-- 3. Si scriva un predicato sameSums che presa una lista di alberi [t1, ..., tn] determina se le somme
+-- s1, ..., sn dei valori degli elementi di ogni ti sono tutte uguali fra loro.
+
+-- prende una lista di alberi e ritorna una lista di interi (somme di ogni albero)
+sumListOfTrees :: Num a => [Tree a] -> [a]
+sumListOfTrees = map getSumTree
+
+-- prende una lista di interi e controlla se sono tutti uguali
+areAllEqual :: Eq a => [a] -> Bool
+areAllEqual [] = True
+areAllEqual (x:xs) = all (== x) xs
+
+sameSums :: (Num a, Eq a) => [Tree a] -> Bool
+sameSums trees = areAllEqual (sumListOfTrees trees)
