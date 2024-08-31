@@ -142,3 +142,27 @@ areAllEqual :: Eq a => [a] -> Bool
 areAllEqual [] = True
 areAllEqual (x:xs) = all (== x) xs
   ~~~ 
+
+## Strutture dati
+
+### `Tree` 
+~~~ haskell
+data Tree a = Void | Node {
+    val :: a,
+    left :: Tree a,
+    right :: Tree a
+} deriving (Eq, Ord, Read, Show)
+~~~ 
+Un esempio e' il seguente: 
+
+~~~ haskell
+(Node 1 (Node 2 Void (Node 4 Void 5)) (Node 3 Void Void)) =
+
+         1
+      /     \
+     2       3
+    / \     / \
+       4
+      / \
+         5
+~~~ 
