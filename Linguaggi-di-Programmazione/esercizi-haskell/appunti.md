@@ -142,10 +142,11 @@ areAllEqual :: Eq a => [a] -> Bool
 areAllEqual [] = True
 areAllEqual (x:xs) = all (== x) xs
   ~~~ 
+<br>
 
-## Strutture dati
+# Alberi
 
-### `Tree` 
+## Definizione 
 ~~~ haskell
 data Tree a = Void | Node {
     val :: a,
@@ -165,4 +166,27 @@ Un esempio e' il seguente:
        4
       / \
          5
+~~~ 
+
+## Funzioni
+~~~ haskell
+-- inserisce un elemento in un BST
+bstInsert :: (Ord a) => a -> Tree a -> Tree a
+bstInsert x Void = Node x Void Void 
+bstInsert x (Node val left right)
+  | x < val = Node val (bstInsert x left) right
+  | otherwise = Node val left (bstInsert x right)
+
+-- ritorna true se l'elemento dato come input esiste nel BST
+bstElem :: (Ord a) => Tree a -> a -> Bool
+bstElem Void _ = False
+bstElem (Node val left right) n
+  | n == val = True
+  | n > val = bstElem right n
+  | n < val = bstElem left n 
+
+-- ritorna la somma di tutti gli elementi in un albero
+getSumTree :: Num a => Tree a -> a
+getSumTree Void = 0
+getSumTree (Node val left right) = val + getSumTree left + getSumTree right
 ~~~ 

@@ -134,3 +134,10 @@ bstElem (Node val left right) n
   | n == val = True
   | n > val = bstElem right n
   | n < val = bstElem left n 
+
+-- 5. Si scriva una funzione per eseguire l’inserimento di un dato x in un albero t
+bstInsert :: (Ord a) => a -> Tree a -> Tree a
+bstInsert x Void = Node x Void Void 
+bstInsert x (Node val left right)
+  | x < val = Node val (bstInsert x left) right
+  | otherwise = Node val left (bstInsert x right)
