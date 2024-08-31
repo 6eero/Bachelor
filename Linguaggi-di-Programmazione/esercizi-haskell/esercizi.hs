@@ -47,7 +47,7 @@ sumOddPositionV2 = sum . removeEvenPosition
 quicksort :: [Int] -> [Int]
 quicksort [] = []
 quicksort [x] = [x]
-quicksort (pivot:xs) =  quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quicksort [x | x <- xs, x > pivot]
+quicksort (pivot:xs) = quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quicksort [x | x <- xs, x > pivot]
 
 -- 2.4 Scrivere una funzione che calcola i 2 minori elementi dispari di una lista (se esistono). Ad esempio minOdd([2,3,4,6,8,7,5]) riduce a (3,5)
 minOdd :: [Int] -> [Int]
@@ -110,8 +110,7 @@ getSumTree (Node val left right) = val + getSumTree left + getSumTree right
 -- sia utilizzabile la funzione odd.
 getOddSumTree :: (Num a, Integral a) => Tree a -> a
 getOddSumTree Void = 0
-getOddSumTree (Node val left right) =
-    (if odd val then val else 0) + getOddSumTree left + getOddSumTree right
+getOddSumTree (Node val left right) = (if odd val then val else 0) + getOddSumTree left + getOddSumTree right
 
 -- 3. Si scriva un predicato sameSums che presa una lista di alberi [t1, ..., tn] determina se le somme
 -- s1, ..., sn dei valori degli elementi di ogni ti sono tutte uguali fra loro.
@@ -127,3 +126,11 @@ areAllEqual (x:xs) = all (== x) xs
 
 sameSums :: (Num a, Eq a) => [Tree a] -> Bool
 sameSums trees = areAllEqual (sumListOfTrees trees)
+
+-- 4. Scrivere un predicato bstElem per determinare se un valore e' presente in un BST.
+bstElem :: (Ord a) => Tree a -> a -> Bool
+bstElem Void _ = False
+bstElem (Node val left right) n
+  | n == val = True
+  | n > val = bstElem right n
+  | n < val = bstElem left n 
