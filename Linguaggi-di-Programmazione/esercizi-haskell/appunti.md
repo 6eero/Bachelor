@@ -186,7 +186,12 @@ bstElem (Node val left right) n
   | n < val = bstElem left n 
 
 -- ritorna la somma di tutti gli elementi in un albero
-getSumTree :: Num a => Tree a -> a
-getSumTree Void = 0
-getSumTree (Node val left right) = val + getSumTree left + getSumTree right
+bstSum :: Num a => Tree a -> a
+bstSum Void = 0
+bstSum (Node val left right) = val + bstSum left + bstSum right
+
+-- ritorna la lista ordinata degli elementi nell'albero
+bstInorder :: (Ord a) => Tree a -> [a]
+bstInorder Void = []
+bstInorder (Node val left right) = bstInorder left ++ [val] ++ bstInorder right
 ~~~ 

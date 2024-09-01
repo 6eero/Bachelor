@@ -141,3 +141,17 @@ bstInsert x Void = Node x Void Void
 bstInsert x (Node val left right)
   | x < val = Node val (bstInsert x left) right
   | otherwise = Node val left (bstInsert x right)
+
+-- 6. Si scriva una funzione bst2List che calcola la lista ordinata degli elementi di un BST. Ci si assicuri
+-- di scrivere una funzione lineare (Inorder Traversal).
+
+-- (Node 22 (Node 12 (Node 8 Void Void) (Node 20 Void Void)) (Node 30 (Node 25 Void Void) (Node 40 Void Void)))
+-- [8 12 20 22 25 30 40]
+
+bst2List :: (Ord a) => Tree a -> [a]
+bst2List Void = []
+bst2List (Node val left right) = bst2List left ++ [val] ++ bst2List right
+
+-- 8. Si scriva una funzione filtertree p t che costruisce una lista (ordinata) di tutti gli elementi
+-- dell’albero t che soddisfano il predicato p.
+
