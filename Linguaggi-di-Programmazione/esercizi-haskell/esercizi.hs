@@ -133,25 +133,57 @@ bstElem Void _ = False
 bstElem (Node val left right) n
   | n == val = True
   | n > val = bstElem right n
-  | n < val = bstElem left n 
+  | n < val = bstElem left n
 
 -- 5. Si scriva una funzione per eseguire l’inserimento di un dato x in un albero t
 bstInsert :: (Ord a) => a -> Tree a -> Tree a
-bstInsert x Void = Node x Void Void 
+bstInsert x Void = Node x Void Void
 bstInsert x (Node val left right)
   | x < val = Node val (bstInsert x left) right
   | otherwise = Node val left (bstInsert x right)
 
--- 6. Si scriva una funzione bst2List che calcola la lista ordinata degli elementi di un BST. Ci si assicuri
+-- 6.1. Si scriva una funzione bst2List che calcola la lista ordinata degli elementi di un BST. Ci si assicuri
 -- di scrivere una funzione lineare (Inorder Traversal).
-
--- (Node 22 (Node 12 (Node 8 Void Void) (Node 20 Void Void)) (Node 30 (Node 25 Void Void) (Node 40 Void Void)))
--- [8 12 20 22 25 30 40]
-
-bst2List :: (Ord a) => Tree a -> [a]
+bst2List :: Tree a -> [a]
 bst2List Void = []
 bst2List (Node val left right) = bst2List left ++ [val] ++ bst2List right
 
+-- 6.2. Postorder Traversal
+bstPostorder :: Tree a -> [a]
+bstPostorder Void = []
+bstPostorder (Node val left right) = bstPostorder right ++ [val] ++ bstPostorder left
+
 -- 8. Si scriva una funzione filtertree p t che costruisce una lista (ordinata) di tutti gli elementi
 -- dell’albero t che soddisfano il predicato p.
+filterTree :: (a -> Bool) -> Tree a -> [a]
+filterTree p t = filter p (bst2List t)
 
+-- 9. Si scriva una funzione annotate che costruisca un nuovo BST che in ogni nodo contenga, al posto
+-- del valore originale, una coppia composta dal medesimo valore e dall’altezza del nodo stesso (la
+-- lunghezza del massimo cammino, cioe' 1 + max(height(sx), height(dx)). Si scelga di attribuire
+-- all’albero vuoto 0 o -1 a seconda delle preferenze.
+-- [Con una opportuna scelta dell’ordine di ricorsione si puo' fare in tempo lineare]
+
+-- costo = O(n)
+getHeight :: Tree a -> Int
+getHeight Void = 0
+getHeight (Node val left right) = 1 + max (getHeight left) (getHeight right)
+
+-- costo = O(n): calcolo l'altezza una volta sola e la passo alle ricorsioni decrementata per ogni livello
+annotate :: Ord a => Tree a -> Tree (a, Int)
+annotate tree = annotateHelper tree (getHeight tree)
+  where
+    annotateHelper :: Tree a -> Int -> Tree (a, Int)
+    annotateHelper Void _ = Void
+    annotateHelper (Node val left right) h = Node 
+      (val, h) 
+      (annotateHelper left (h - 1)) 
+      (annotateHelper right (h - 1))
+
+-- costo = O(n^2): getHeight viene chiamata n volte
+annotateOld :: Ord a => Tree a -> Tree (a, Int)
+annotateOld Void = Void
+annotateOld (Node val left right) = Node 
+  (val, 1 + max (getHeight (annotateOld left)) (getHeight (annotateOld right))) 
+  (annotateOld left) 
+  (annotateOld right)

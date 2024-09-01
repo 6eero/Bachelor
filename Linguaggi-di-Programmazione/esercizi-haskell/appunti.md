@@ -157,15 +157,15 @@ data Tree a = Void | Node {
 Un esempio e' il seguente: 
 
 ~~~ haskell
-(Node 1 (Node 2 Void (Node 4 Void 5)) (Node 3 Void Void)) =
+Node 22 
+ (Node 12 (Node 8 Void Void) (Node 20 Void Void)) 
+ (Node 30 (Node 25 Void Void) (Node 40 Void Void))
 
-         1
-      /     \
-     2       3
-    / \     / \
-       4
-      / \
-         5
+     22
+    /  \
+  12    30
+ / \    / \
+8  20  25  40
 ~~~ 
 
 ## Funzioni
@@ -191,7 +191,12 @@ bstSum Void = 0
 bstSum (Node val left right) = val + bstSum left + bstSum right
 
 -- ritorna la lista ordinata degli elementi nell'albero
-bstInorder :: (Ord a) => Tree a -> [a]
+bstInorder :: Tree a -> [a]
 bstInorder Void = []
 bstInorder (Node val left right) = bstInorder left ++ [val] ++ bstInorder right
+
+-- ritorna l'altezza dell'albero
+getHeight :: Tree a -> Int
+getHeight Void = 0
+getHeight (Node val left right) = 1 + max (getHeight left) (getHeight right)
 ~~~ 
