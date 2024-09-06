@@ -96,56 +96,43 @@ foldr (+) 0 [1..5] -- 15
 tail [1,2,3] --[2,3]
 ~~~
 
-## Funzioni che potrebbero tornare utili
+<br>
 
-### `containsElement` 
-- **Input**: una `lista` e un `valore`
-- **Output**: `True` se la lista contine il valore, `False` altrimenti
-
+# Liste
+## Funzioni 
 ~~~ haskell
+-- prende in input una lista e un elemento. Torna true se l'elemento si trova nella lista
 containsElement :: [Int] -> Int -> Bool
 containsElement [] _ = False
 containsElement (x:xs) n = (x == n) || containsElement xs n
-  ~~~ 
 
-### `quickSort` 
-- **Input**: una `lista` 
-- **Output**: la `lista` ordinata
-
-~~~ haskell
-quicksort :: [Int] -> [Int]
-quicksort [] = []
-quicksort [x] = [x]
-quicksort (pivot:xs) =  
-  quicksort [x | x <- xs, x <= pivot] ++ 
-  [pivot] ++ 
-  quicksort [x | x <- xs, x > pivot]
-  ~~~ 
-
-### `transpose` 
-- **Input**: una `matrice` 
-- **Output**: la `matrice` transposta
-
-~~~ haskell
-transpose :: [[a]] -> [[a]]
-transpose ([]:_) = []
-transpose x = map head x : transpose (map tail x)
-  ~~~ 
-
-### `areAllEqual` 
-- **Input**: una `lista` 
-- **Output**: `true` se i suoi elementi sono tutti uguali `false` altrimenti
-
-~~~ haskell
--- prende una lista di interi e controlla se sono tutti uguali
+-- prende in input una lista. Torna true se tutti gli elementi che contiene sono uguali
 areAllEqual :: Eq a => [a] -> Bool
 areAllEqual [] = True
 areAllEqual (x:xs) = all (== x) xs
-  ~~~ 
+
+-- quicksort
+quicksort :: Ord a => [a] -> [a]
+quicksort [] = []
+quicksort [x] = [x]
+quicksort (pivot:xs) = quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quicksort [x | x <- xs, x > pivot]
+~~~ 
+
+<br>
+
+# Matrici
+## Funzioni 
+~~~ haskell
+-- prende in input una matrice e ne scambia righe con colonne 
+-- transpose [[1,2,3],[4,5,6],[7,8,9]] -> [[1,4,7],[2,5,8],[3,6,9]]
+transpose :: [[a]] -> [[a]]
+transpose ([]:_) = []
+transpose x = map head x : transpose (map tail x)
+~~~ 
+
 <br>
 
 # Alberi
-
 ## Definizione 
 ~~~ haskell
 data Tree a = Void | Node {
