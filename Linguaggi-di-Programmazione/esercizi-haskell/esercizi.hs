@@ -213,6 +213,15 @@ height :: (Eq a, Show a) => Tree a -> Int
 height = treeFold (\_ heights -> 1 + (if null heights then 0 else maximum heights)) (-1)
 
 
+-- 4. Si scrivano le generalizzazioni delle funzioni foldr e foldl delle liste per Alberi Generici aventi i seguenti tipi (abbiamo bisogno di due “zeri” corrispondenti all’albero vuoto e alla lista di alberi vuota):
+treefoldr :: (Eq a, Show a) => (a -> b -> b) -> b -> (b -> b -> b) -> b -> Tree a -> b
+treefoldr _ z _ _ Nil = z
+treefoldr f z g b (Vertex x ts) = f x (foldr (flip (treefoldr f z g)) b ts)
+  where
+    foldr _ z []     = z
+    foldr k z (x:xs) = k x (foldr k z xs)
+
+
 -- 7. Si scriva una funzione degree che restituisce il grado di un albero (il massimo del numero di figli per ogni nodo).
 degree :: (Eq a, Show a) => Tree a -> Int
 degree = treeFold (\_ children -> 1 + maximum (0 : children)) 0
