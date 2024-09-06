@@ -179,26 +179,42 @@ annotate tree = annotateHelper tree (getHeight tree)
   where
     annotateHelper :: BST a -> Int -> BST (a, Int)
     annotateHelper Void _ = Void
-    annotateHelper (Node val left right) h = Node 
-      (val, h) 
-      (annotateHelper left (h - 1)) 
+    annotateHelper (Node val left right) h = Node
+      (val, h)
+      (annotateHelper left (h - 1))
       (annotateHelper right (h - 1))
 
 annotateOld :: Ord a => BST a -> BST (a, Int) -- costo = O(n^2): getHeight viene chiamata n volte
 annotateOld Void = Void
-annotateOld (Node val left right) = Node 
-  (val, 1 + max (getHeight (annotateOld left)) (getHeight (annotateOld right))) 
-  (annotateOld left) 
+annotateOld (Node val left right) = Node
+  (val, 1 + max (getHeight (annotateOld left)) (getHeight (annotateOld right)))
+  (annotateOld left)
   (annotateOld right)
 
 
 
 
 {----------------------------------------x ALBERI GENERICI x----------------------------------------}
-data Tree a = Nil | Vertex a [Tree a]
-  deriving (Eq, Show)
+data Tree a = Nil | Vertex a [Tree a] deriving (Eq, Show)
 
 -- 1. Si scriva una generalizzazione della funzione foldr delle liste per Alberi Generici (applica una funzione ad ogni nodo dell'albero) che abbia il seguente tipo:
 treeFold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
 treeFold _ base Nil = base
 treeFold fun base (Vertex x children) = fun x (map (treeFold fun base) children)
+
+
+-- 1.a. Usa la funzione treeFold per generare l'albero con tutti i nodi che hano valore moltiplicato per 3
+tripleNodeValue :: (Num a, Eq a, Show a) => Tree a -> Tree a
+tripleNodeValue = treeFold (\x children -> Vertex (3 * x) children) Nil
+
+
+-- 2. Si scriva una funzione height per calcolare l’altezza di un albero usando opportunamente la treeFold dell’Esercizio 1. Si attribuisca altezza -1 all’albero vuoto.
+height :: (Eq a, Show a) => Tree a -> Int
+height = treeFold (\_ heights -> 1 + (if null heights then 0 else maximum heights)) (-1)
+
+
+-- 7. Si scriva una funzione degree che restituisce il grado di un albero (il massimo del numero di figli per ogni nodo).
+degree :: (Eq a, Show a) => Tree a -> Int
+degree = treeFold (\_ children -> 1 + maximum (0 : children)) 0
+
+
