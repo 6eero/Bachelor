@@ -138,3 +138,51 @@ getDiagonal xs = getDiagonalHelper xs 0
     getDiagonalHelper :: [[Int]] -> Int -> [Int]
     getDiagonalHelper [] _ = []
     getDiagonalHelper (x:xs) pos = (x !! pos) : getDiagonalHelper xs (pos + 1)
+
+
+{----------------------------------------x 19 settembre 2018 x----------------------------------------}
+-- Scrivere una funzione Haskell che dato un numero naturale n costruisca una scacchiara di dimensione
+-- n ossia una matrice quadrata contenenti i soli valori 0 e 1 alternati
+buildList :: Int -> [Int]
+buildList 0 = []
+buildList n = 1 : buildList (n-1)
+
+buildBoard :: Int -> [[Int]]
+buildBoard 0 = []
+buildBoard n = buildList n : buildBoardHelper n (n - 1)
+
+buildBoardHelper :: Int -> Int -> [[Int]]
+buildBoardHelper _ 0 = []
+buildBoardHelper n m = buildList n : buildBoardHelper n (m-1)
+
+
+{----------------------------------------x 15 giugno 2022 x----------------------------------------}
+-- Scrivere le seguenti funzioni Haskell:
+
+-- una funzione che in una lista di booleani conta il numero di elemeniti uguali a True presenti nella
+-- lista
+countTrue :: [Bool] -> Int
+countTrue [] = 0
+countTrue (x:xs)
+  | x = 1+countTrue xs
+  | otherwise = countTrue xs
+
+-- una funzione che data una lista di elementi ed un valore conta il numero di volte che il valore
+-- appare nella lista;
+countVal :: Eq a => [a] -> a -> Int
+countVal [] _ = 0
+countVal (x:xs) n
+  | x == n = 1+countVal xs n
+  | otherwise = countVal xs n
+
+-- una funzione che data una lista determina il numero di massimo di ripetizioni, non necessariamente
+-- consecutive, di una stesso valore nella lista.
+countMax :: Eq a => [a] -> Int
+countMax [] = 0
+countMax x = countMaxHelper x 0
+  where
+    countMaxHelper :: Eq a => [a] -> Int -> Int
+    countMaxHelper [] n = n
+    countMaxHelper (x:xs) n
+      | countVal (x:xs) x > n = countMaxHelper xs (countVal (x:xs) x)
+      | otherwise = countMaxHelper xs n
