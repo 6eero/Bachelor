@@ -106,39 +106,39 @@ isSymmetric x = x == transpose x
 
 {----------------------------------------x BST x----------------------------------------}
 
-data Tree a = Void | Node {
+data BST a = Void | Node {
     val :: a,
-    left :: Tree a,
-    right :: Tree a
+    left :: BST a,
+    right :: BST a
 } deriving (Eq, Ord, Read, Show)
 
 
 -- 1. Scrivere una funzione che calcola la somma dei valori di un albero a valori sommabili
-getSumTree :: Num a => Tree a -> a
-getSumTree Void = 0
-getSumTree (Node val left right) = val + getSumTree left + getSumTree right
+getSumBST :: Num a => BST a -> a
+getSumBST Void = 0
+getSumBST (Node val left right) = val + getSumBST left + getSumBST right
 
 
 -- 2. Scrivere una funzione che calcola la somma dei valori dispari di un albero a valori sommabili su cui sia utilizzabile la funzione odd.
-getOddSumTree :: (Num a, Integral a) => Tree a -> a
-getOddSumTree Void = 0
-getOddSumTree (Node val left right) = (if odd val then val else 0) + getOddSumTree left + getOddSumTree right
+getOddSumBST :: (Num a, Integral a) => BST a -> a
+getOddSumBST Void = 0
+getOddSumBST (Node val left right) = (if odd val then val else 0) + getOddSumBST left + getOddSumBST right
 
 
 -- 3. Si scriva un predicato sameSums che presa una lista di alberi [t1, ..., tn] determina se le somme s1,...,sn dei valori degli elementi di ogni ti sono tutte uguali fra loro.
-sumListOfTrees :: Num a => [Tree a] -> [a]  -- prende una lista di alberi e ritorna una lista di interi (somme di ogni albero)
-sumListOfTrees = map getSumTree
+sumListOfBSTs :: Num a => [BST a] -> [a]  -- prende una lista di alberi e ritorna una lista di interi (somme di ogni albero)
+sumListOfBSTs = map getSumBST
 
 areAllEqual :: Eq a => [a] -> Bool  -- prende una lista e controlla se sono tutti uguali
 areAllEqual [] = True
 areAllEqual (x:xs) = all (== x) xs
 
-sameSums :: (Num a, Eq a) => [Tree a] -> Bool
-sameSums trees = areAllEqual (sumListOfTrees trees)
+sameSums :: (Num a, Eq a) => [BST a] -> Bool
+sameSums trees = areAllEqual (sumListOfBSTs trees)
 
 
 -- 4. Scrivere un predicato bstElem per determinare se un valore e' presente in un BST.
-bstElem :: (Ord a) => Tree a -> a -> Bool
+bstElem :: (Ord a) => BST a -> a -> Bool
 bstElem Void _ = False
 bstElem (Node val left right) n
   | n == val = True
@@ -147,7 +147,7 @@ bstElem (Node val left right) n
 
 
 -- 5. Si scriva una funzione per eseguire l’inserimento di un dato x in un albero t
-bstInsert :: (Ord a) => a -> Tree a -> Tree a
+bstInsert :: (Ord a) => a -> BST a -> BST a
 bstInsert x Void = Node x Void Void
 bstInsert x (Node val left right)
   | x < val = Node val (bstInsert x left) right
@@ -155,38 +155,50 @@ bstInsert x (Node val left right)
 
 
 -- 6. Si scriva una funzione bst2List che calcola la lista ordinata degli elementi di un BST. Ci si assicuri di scrivere una funzione lineare (Inorder Traversal).
-bst2List :: Tree a -> [a]
+bst2List :: BST a -> [a]
 bst2List Void = []
 bst2List (Node val left right) = bst2List left ++ [val] ++ bst2List right
 
-bstPostorder :: Tree a -> [a] -- 6.a. Postorder Traversal
+bstPostorder :: BST a -> [a] -- 6.a. Postorder Traversal
 bstPostorder Void = []
 bstPostorder (Node val left right) = bstPostorder right ++ [val] ++ bstPostorder left
 
 
--- 8. Si scriva una funzione filtertree p t che costruisce una lista (ordinata) di tutti gli elementi dell’albero t che soddisfano il predicato p.
-filterTree :: (a -> Bool) -> Tree a -> [a]
-filterTree p t = filter p (bst2List t)
+-- 8. Si scriva una funzione filterBST p t che costruisce una lista (ordinata) di tutti gli elementi dell’albero t che soddisfano il predicato p.
+filterBST :: (a -> Bool) -> BST a -> [a]
+filterBST p t = filter p (bst2List t)
 
 
 -- 9. Si scriva una funzione annotate che costruisca un nuovo BST che in ogni nodo contenga, al posto del valore originale, una coppia composta dal medesimo valore e dall’altezza del nodo stesso (la lunghezza del massimo cammino, cioe' 1 + max(height(sx), height(dx)). Si scelga di attribuire all’albero vuoto 0 o -1 a seconda delle preferenze. [Con una opportuna scelta dell’ordine di ricorsione si puo' fare in tempo lineare]
-getHeight :: Tree a -> Int  -- costo = O(n)
+getHeight :: BST a -> Int  -- costo = O(n)
 getHeight Void = 0
 getHeight (Node val left right) = 1 + max (getHeight left) (getHeight right)
 
-annotate :: Ord a => Tree a -> Tree (a, Int)  -- costo = O(n): calcolo l'altezza una volta sola e la passo alle ricorsioni decrementata per ogni livello
+annotate :: Ord a => BST a -> BST (a, Int)  -- costo = O(n): calcolo l'altezza una volta sola e la passo alle ricorsioni decrementata per ogni livello
 annotate tree = annotateHelper tree (getHeight tree)
   where
-    annotateHelper :: Tree a -> Int -> Tree (a, Int)
+    annotateHelper :: BST a -> Int -> BST (a, Int)
     annotateHelper Void _ = Void
     annotateHelper (Node val left right) h = Node 
       (val, h) 
       (annotateHelper left (h - 1)) 
       (annotateHelper right (h - 1))
 
-annotateOld :: Ord a => Tree a -> Tree (a, Int) -- costo = O(n^2): getHeight viene chiamata n volte
+annotateOld :: Ord a => BST a -> BST (a, Int) -- costo = O(n^2): getHeight viene chiamata n volte
 annotateOld Void = Void
 annotateOld (Node val left right) = Node 
   (val, 1 + max (getHeight (annotateOld left)) (getHeight (annotateOld right))) 
   (annotateOld left) 
   (annotateOld right)
+
+
+
+
+{----------------------------------------x ALBERI GENERICI x----------------------------------------}
+data Tree a = Nil | Vertex a [Tree a]
+  deriving (Eq, Show)
+
+-- 1. Si scriva una generalizzazione della funzione foldr delle liste per Alberi Generici (applica una funzione ad ogni nodo dell'albero) che abbia il seguente tipo:
+treeFold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
+treeFold _ base Nil = base
+treeFold fun base (Vertex x children) = fun x (map (treeFold fun base) children)

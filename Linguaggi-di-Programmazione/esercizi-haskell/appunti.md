@@ -187,3 +187,28 @@ getHeight :: Tree a -> Int
 getHeight Void = 0
 getHeight (Node val left right) = 1 + max (getHeight left) (getHeight right)
 ~~~ 
+
+# Alberi Generici
+## Definizione 
+~~~ haskell
+data Tree a = Nil | Vertex a [Tree a] deriving (Eq, Show)
+~~~ 
+Un esempio e' il seguente: 
+
+~~~ haskell
+Vertex 1 [
+  Vertex 2 [],
+  Vertex 3 [ Vertex 5 [], Vertex 6 [] ],
+  Vertex 4 []
+]
+   1
+ / | \
+2  3  4
+  / \
+ 5   6
+~~~ 
+
+## Funzioni
+~~~ haskell
+
+~~~ 
