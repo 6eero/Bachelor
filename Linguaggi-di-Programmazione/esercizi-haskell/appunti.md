@@ -79,14 +79,14 @@ zipWith (\x y -> x == y) [1,2,3] [1,2,3] --[True,True,True]
 2. un valore iniziale
 3. una lista
 
-La funzione `foldr` applica la funzione passata come input al al valore iniziale e al primo elemento della lista, poi applica il risultato dell'operazione all'elemento successivo, e così via fino alla fine della lista.
+La funzione `foldr` applica la funzione passata come input al valore iniziale e all' elemento piu a destra della lista, poi applica il risultato dell'operazione all'elemento successivo, e così via fino alla fine della lista.
 
 ~~~ haskell
 -- Esegue l'or di tutti gli elementi della lista, partendo da un booleano falso
 foldr (||) False [True,False,False] --True
 
 -- Somma tutti gli elementi di una lista
-foldr (+) 0 [1..5] -- 15
+foldr (+) 0 [1, 2, 3] -- 1 + (2 + (3 + 0)) = 6
 ~~~
 
 #### Funzione `tail`
@@ -209,6 +209,52 @@ Vertex 1 [
 ~~~ 
 
 ## Funzioni
-~~~ haskell
+### treeFold
+La funzione `treeFold` riduce un albero a un singolo valore. Prende tre argomenti:
 
+1. **Una funzione di accumulo**: Questa funzione definisce come combinare il valore del nodo corrente con i risultati dei suoi sottoalberi. La funzione di accumulo ha il tipo `a -> [b] -> b`, dove `a` è il valore del nodo corrente e `[b]` è la lista dei risultati accumulati dai sottoalberi.
+
+2. **Un valore base**: Questo è il valore iniziale con cui iniziare il processo di accumulazione. Ha il tipo `b`.
+
+3. **Un albero**: La struttura dell'albero su cui si desidera applicare il fold, con tipo `Tree a`.
+
+Il risultato della funzione è un valore di tipo `b` che rappresenta il risultato finale dell'operazione di fold sull'intero albero.
+~~~ haskell
+treeFold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
+treeFold _ base Nil = base
+treeFold fun base (Vertex x children) = fun x (map (treeFold fun base) children)
+
+-- funzione che somma tutti i nodi dell'albero
+sumTree :: (Eq a, Num a) => Tree a -> a
+sumTree = treeFold (\x xs -> x + sum xs) 0
+
+-- funzione che concatena tutte le stringhe dell'albero
+concatTree :: Tree String -> String
+concatTree = treeFold (\x xs -> x ++ concat xs) ""
+
+-- funzione che sostituise i numeri dispari con 0
+removeOddTree :: Tree Int -> Tree Int
+removeOddTree = treeFold (\x cleanChildren -> if odd x then Vertex 0 cleanChildren else Vertex x cleanChildren) Nil
+
+-- funzione che conta il numero totale di nodi
+countNodes :: Eq a => Tree a -> Int
+countNodes = treeFold (\_ xs -> 1 + sum xs) 0
+
+-- funzione ritorna che il minimo valore in un albero
+minTree :: (Ord a) => Tree a -> a
+minTree = treeFold (\x xs -> minimum (x : xs)) (error "Empty tree")
+
+-- funzione che verifica se esiste un valore che soddisfa una certa condizione
+-- existsCondition (==2) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
+-- existsCondition (<3) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
+-- existsCondition (even) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
+existsCondition :: Eq a => (a -> Bool) -> Tree a -> Bool
+existsCondition condition = treeFold (\x xs -> condition x || or xs) False
+
+-- Funzione che ritorna true se un dato elemento compare in ogni cammino dell'albero
+elementInEveryPath :: (Eq a) => a -> Tree a -> Bool
+elementInEveryPath x = treeFold check True
+  where
+    check y [] = y == x  -- Caso foglia: il nodo deve essere uguale a x
+    check y ys = (y == x) || and ys  -- Il nodo corrente o uno dei figli deve avere x
 ~~~ 

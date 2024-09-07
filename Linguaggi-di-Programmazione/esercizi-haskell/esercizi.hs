@@ -198,7 +198,7 @@ annotateOld (Node val left right) = Node
 data Tree a = Nil | Vertex a [Tree a] deriving (Eq, Show)
 
 -- 1. Si scriva una generalizzazione della funzione foldr delle liste per Alberi Generici (applica una funzione ad ogni nodo dell'albero) che abbia il seguente tipo:
-treeFold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
+treeFold :: (Eq a) => (a -> [b] -> b) -> b -> Tree a -> b
 treeFold _ base Nil = base
 treeFold fun base (Vertex x children) = fun x (map (treeFold fun base) children)
 
@@ -218,17 +218,44 @@ simplify :: (Eq a, Show a) => Tree a -> Tree a
 simplify = treeFold (\x children -> Vertex x (filter (/= Nil) children)) Nil
 
 
--- 4. Si scrivano le generalizzazioni delle funzioni foldr e foldl delle liste per Alberi Generici aventi i seguenti tipi (abbiamo bisogno di due “zeri” corrispondenti all’albero vuoto e alla lista di alberi vuota):
-treefoldr :: (Eq a, Show a) => (a -> b -> b) -> b -> (b -> b -> b) -> b -> Tree a -> b
-treefoldr _ z _ _ Nil = z
-treefoldr f z g b (Vertex x ts) = f x (foldr (flip (treefoldr f z g)) b ts)
-  where
-    foldr _ z []     = z
-    foldr k z (x:xs) = k x (foldr k z xs)
-
-
 -- 7. Si scriva una funzione degree che restituisce il grado di un albero (il massimo del numero di figli per ogni nodo).
 degree :: (Eq a, Show a) => Tree a -> Int
 degree = treeFold (\_ children -> 1 + maximum (0 : children)) 0
+
+
+
+
+-- funzione che somma tutti i nodi dell'albero
+sumTree :: (Eq a, Num a) => Tree a -> a
+sumTree = treeFold (\x xs -> x + sum xs) 0
+
+-- funzione che concatena tutte le stringhe dell'albero
+concatTree :: Tree String -> String
+concatTree = treeFold (\x xs -> x ++ concat xs) ""
+
+-- funzione che sostituise i numeri dispari con 0
+removeOddTree :: Tree Int -> Tree Int
+removeOddTree = treeFold (\x cleanChildren -> if odd x then Vertex 0 cleanChildren else Vertex x cleanChildren) Nil
+
+-- funzione che conta il numero totale di nodi
+countNodes :: Eq a => Tree a -> Int
+countNodes = treeFold (\_ xs -> 1 + sum xs) 0
+
+-- funzione che il minimo valore in un albero
+maxTree :: (Ord a) => Tree a -> a
+maxTree = treeFold (\x xs -> minimum (x : xs)) (error "Empty tree")
+
+-- Funzione che verifica se esiste un valore che soddisfa una certa condizione
+existsCondition :: Eq a => (a -> Bool) -> Tree a -> Bool
+existsCondition condition = treeFold (\x xs -> condition x || or xs) False
+
+-- Funzione che ritorna true se un dato elemento compare in ogni cammino dell'albero
+elementInEveryPath :: (Eq a) => a -> Tree a -> Bool
+elementInEveryPath x = treeFold check True
+  where
+    check y [] = y == x  -- Caso foglia: il nodo deve essere uguale a x
+    check y ys = (y == x) || and ys  -- Il nodo corrente o uno dei figli deve avere x
+
+
 
 
