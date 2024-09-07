@@ -250,11 +250,7 @@ existsCondition :: Eq a => (a -> Bool) -> Tree a -> Bool
 existsCondition condition = treeFold (\x xs -> condition x || or xs) False
 
 -- Funzione che ritorna true se un dato elemento compare in ogni cammino dell'albero
-elementInEveryPath :: (Eq a) => a -> Tree a -> Bool
-elementInEveryPath x = treeFold check True
-  where
-    check y [] = y == x  -- Caso foglia: il nodo deve essere uguale a x
-    check y ys = (y == x) || and ys  -- Il nodo corrente o uno dei figli deve avere x
+
 
 
 

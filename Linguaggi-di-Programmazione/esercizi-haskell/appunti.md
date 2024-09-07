@@ -206,6 +206,10 @@ Vertex 1 [
 2  3  4
   / \
  5   6
+
+ (Vertex x children):
+ - x: int = 1
+ - children: list =  [ Vertex 2 [], Vertex 3 [Vertex 5 [], Vertex 6 []], Vertex 4 [] ]
 ~~~ 
 
 ## Funzioni
@@ -250,11 +254,4 @@ minTree = treeFold (\x xs -> minimum (x : xs)) (error "Empty tree")
 -- existsCondition (even) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
 existsCondition :: Eq a => (a -> Bool) -> Tree a -> Bool
 existsCondition condition = treeFold (\x xs -> condition x || or xs) False
-
--- Funzione che ritorna true se un dato elemento compare in ogni cammino dell'albero
-elementInEveryPath :: (Eq a) => a -> Tree a -> Bool
-elementInEveryPath x = treeFold check True
-  where
-    check y [] = y == x  -- Caso foglia: il nodo deve essere uguale a x
-    check y ys = (y == x) || and ys  -- Il nodo corrente o uno dei figli deve avere x
 ~~~ 
