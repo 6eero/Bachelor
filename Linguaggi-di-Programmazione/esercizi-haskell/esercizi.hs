@@ -213,6 +213,11 @@ height :: (Eq a, Show a) => Tree a -> Int
 height = treeFold (\_ heights -> 1 + (if null heights then 0 else maximum heights)) (-1)
 
 
+--3. Si scriva una funzione simplify per eliminare i figli Void ridondanti usando opportunamente la treefold dell’Esercizio 1.
+simplify :: (Eq a, Show a) => Tree a -> Tree a
+simplify = treeFold (\x children -> Vertex x (filter (/= Nil) children)) Nil
+
+
 -- 4. Si scrivano le generalizzazioni delle funzioni foldr e foldl delle liste per Alberi Generici aventi i seguenti tipi (abbiamo bisogno di due “zeri” corrispondenti all’albero vuoto e alla lista di alberi vuota):
 treefoldr :: (Eq a, Show a) => (a -> b -> b) -> b -> (b -> b -> b) -> b -> Tree a -> b
 treefoldr _ z _ _ Nil = z
