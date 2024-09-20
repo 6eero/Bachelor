@@ -102,9 +102,18 @@ tail [1,2,3] --[2,3]
 ## Funzioni 
 ~~~ haskell
 -- prende in input una lista e un elemento. Torna true se l'elemento si trova nella lista
-containsElement :: [Int] -> Int -> Bool
-containsElement [] _ = False
-containsElement (x:xs) n = (x == n) || containsElement xs n
+checkElement :: Eq a => [a] -> a -> Bool
+checkElement [] _ = False
+checkElement (x:xs) el
+  | x == el = True
+  | otherwise = checkElement xs el
+
+-- prende in input una lista e un elemento. Torna la lista senza tutte le occorrenze dell'elemento
+removeElement :: Eq a => [a] -> a -> [a]
+removeElement [] _ = []
+removeElement (x:xs) el
+  | x == el = removeElement xs el
+  | otherwise = x : removeElement xs el
 
 -- prende in input una lista. Torna true se tutti gli elementi che contiene sono uguali
 areAllEqual :: Eq a => [a] -> Bool
