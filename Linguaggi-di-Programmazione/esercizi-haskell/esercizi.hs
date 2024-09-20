@@ -223,35 +223,51 @@ degree :: (Eq a, Show a) => Tree a -> Int
 degree = treeFold (\_ children -> 1 + maximum (0 : children)) 0
 
 
-
-
 -- funzione che somma tutti i nodi dell'albero
 sumTree :: (Eq a, Num a) => Tree a -> a
 sumTree = treeFold (\x xs -> x + sum xs) 0
+
 
 -- funzione che concatena tutte le stringhe dell'albero
 concatTree :: Tree String -> String
 concatTree = treeFold (\x xs -> x ++ concat xs) ""
 
+
 -- funzione che sostituise i numeri dispari con 0
 removeOddTree :: Tree Int -> Tree Int
 removeOddTree = treeFold (\x cleanChildren -> if odd x then Vertex 0 cleanChildren else Vertex x cleanChildren) Nil
+
 
 -- funzione che conta il numero totale di nodi
 countNodes :: Eq a => Tree a -> Int
 countNodes = treeFold (\_ xs -> 1 + sum xs) 0
 
+
 -- funzione che il minimo valore in un albero
 maxTree :: (Ord a) => Tree a -> a
 maxTree = treeFold (\x xs -> minimum (x : xs)) (error "Empty tree")
+
 
 -- Funzione che verifica se esiste un valore che soddisfa una certa condizione
 existsCondition :: Eq a => (a -> Bool) -> Tree a -> Bool
 existsCondition condition = treeFold (\x xs -> condition x || or xs) False
 
--- Funzione che ritorna true se un dato elemento compare in ogni cammino dell'albero
 
 
 
+{----------------------------------------x ALBERI GENERICI x----------------------------------------}
 
+data QT a = C a                       -- Foglia che contiene un colore
+  | Q (QT a) (QT a) (QT a) (QT a)     -- Nodo che contiene 4 sotto QuadTree
+  deriving (Eq , Show)
 
+-- 1. Si scriva una funzione buildNSimplify che dati 4 QuadTree costruisca un QuadTree la cui immagine codificata sia quella ottenuta dalle 4 immagini corrispondenti ai 4 QuadTree messe nei quadranti superiore-sinistro, superiore-destro, inferiore-sinistro, inferiore-destro, rispettivamente. (Attenzione che tutti sono e devono essere QuadTrees, non solo termini di tipo QT)
+buildNSimplify :: (Eq a) => QT a -> QT a -> QT a -> QT a -> QT a
+buildNSimplify qt1 qt2 qt3 qt4
+  | areLeavesEqual qt1 qt2 qt3 qt4 = qt1
+  | otherwise = Q qt1 qt2 qt3 qt4
+
+areLeavesEqual :: (Eq a) => QT a -> QT a -> QT a -> QT a -> Bool  -- check if the leaves of QT are all the same
+areLeavesEqual qt1 qt2 qt3 qt4
+  | qt1 == qt2 && qt2 == qt3 && qt3 == qt4 = True
+  | otherwise = False
