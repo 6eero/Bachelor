@@ -102,11 +102,11 @@ tail [1,2,3] --[2,3]
 ## Funzioni 
 ~~~ haskell
 -- prende in input una lista e un elemento. Torna true se l'elemento si trova nella lista
-checkElement :: Eq a => [a] -> a -> Bool
-checkElement [] _ = False
-checkElement (x:xs) el
+containsElement :: Eq a => [a] -> a -> Bool
+containsElement [] _ = False
+containsElement (x:xs) el
   | x == el = True
-  | otherwise = checkElement xs el
+  | otherwise = containsElement xs el
 
 -- prende in input una lista e un elemento. Torna la lista senza tutte le occorrenze dell'elemento
 removeElement :: Eq a => [a] -> a -> [a]
@@ -141,13 +141,13 @@ transpose x = map head x : transpose (map tail x)
 
 <br>
 
-# Alberi
+# BST
 ## Definizione 
 ~~~ haskell
-data Tree a = Void | Node {
+data BST a = Void | Node {
     val :: a,
-    left :: Tree a,
-    right :: Tree a
+    left :: BST a,
+    right :: BST a
 } deriving (Eq, Ord, Read, Show)
 ~~~ 
 Un esempio e' il seguente: 
@@ -167,14 +167,14 @@ Node 22
 ## Funzioni
 ~~~ haskell
 -- inserisce un elemento in un BST
-bstInsert :: (Ord a) => a -> Tree a -> Tree a
+bstInsert :: (Ord a) => a -> BST a -> BST a
 bstInsert x Void = Node x Void Void 
 bstInsert x (Node val left right)
   | x < val = Node val (bstInsert x left) right
   | otherwise = Node val left (bstInsert x right)
 
 -- ritorna true se l'elemento dato come input esiste nel BST
-bstElem :: (Ord a) => Tree a -> a -> Bool
+bstElem :: (Ord a) => BST a -> a -> Bool
 bstElem Void _ = False
 bstElem (Node val left right) n
   | n == val = True
@@ -182,17 +182,17 @@ bstElem (Node val left right) n
   | n < val = bstElem left n 
 
 -- ritorna la somma di tutti gli elementi in un albero
-bstSum :: Num a => Tree a -> a
+bstSum :: Num a => BST a -> a
 bstSum Void = 0
 bstSum (Node val left right) = val + bstSum left + bstSum right
 
 -- ritorna la lista ordinata degli elementi nell'albero
-bstInorder :: Tree a -> [a]
+bstInorder :: BST a -> [a]
 bstInorder Void = []
 bstInorder (Node val left right) = bstInorder left ++ [val] ++ bstInorder right
 
 -- ritorna l'altezza dell'albero
-getHeight :: Tree a -> Int
+getHeight :: BST a -> Int
 getHeight Void = 0
 getHeight (Node val left right) = 1 + max (getHeight left) (getHeight right)
 ~~~ 

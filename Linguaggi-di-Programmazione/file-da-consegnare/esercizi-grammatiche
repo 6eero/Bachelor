@@ -1,0 +1,284 @@
+/*
+x--------------------------------------------------------------x ANALIZZATORI LESSICALI: ESERCIZIO 1 x--------------------------------------------------------------x
+
+Riconoscere in un file di testo le seguenti classi di lessemi:
+  - parole chiave: var, function, procedure, while, do, if then, else, for
+  - identificatori: stringhe che iniziano con una lettere minuscola dell’alfabeto seguite da lettere, cifre, e i simboli ’_‘,’-’.
+  - costanti numeriche: sequenze di cifre,
+  - operatori: “+”, “++”, “-”, “–”, “=”, “==”,
+*/
+
+%{
+    /* definizioni (opzionale) */
+    #include <stdio.h>
+    int idenifierCount = 0;
+    int keywordCount = 0;
+%}
+
+/* regole */
+%%
+var         { printf("var\n"); keywordCount++;}
+function    { printf("function\n"); keywordCount++;}
+procedure   { printf("procedure\n"); keywordCount++;}
+while       { printf("while\n"); keywordCount++;}
+do          { printf("do\n"); keywordCount++;}
+if          { printf("if\n"); keywordCount++;}
+then        { printf("then\n"); keywordCount++;}
+else        { printf("else\n"); keywordCount++;}
+for         { printf("for\n"); keywordCount++;}
+
+[a-z][a-zA-Z0-9_-]*     { printf("%s e' un identificatore\n", yytext); idenifierCount++;}
+[0-9]+                  { printf("%s e' una sequenza di cifre\n", yytext); }
+
+"+"         { printf("piu\n"); }
+"++"        { printf("piu piu\n"); }
+"-"         { printf("meno\n"); }
+"--"        { printf("meno meno\n"); }
+"="         { printf("uguale\n"); }
+"=="        { printf("uguale uguale\n"); }
+
+[;\(\)\{\}]     { /* Ignora i ;, le () e le { } */ }
+[ \t\n]         { /* Ignora gli spazi, tabulazioni e newline */ }
+
+%%
+
+/* funzioni ausiliari (opzionale) */
+yywrap() {}
+
+int main(int argc, char** argv) {
+    yyin = fopen(argv[1], "r");
+    yylex();
+    printf("\n\nci sono %d identificatori e %d keywords\n", idenifierCount, keywordCount);
+
+    fclose(yyin);
+    return 0;
+}%    
+
+
+
+
+/*
+x--------------------------------------------------------------x ANALIZZATORI LESSICALI: ESERCIZIO 7 x--------------------------------------------------------------x
+
+Riconoscere, in un file di testo, le sequenze di caratteri che rappresentano un numero in uno dei seguenti formati:
+  - numero intero: stringa di cifre decimali, eventualmente precedute dal segno (+/-)
+  - numero frazionari: coppia di stringhe di cifre divise da un punto ed eventualmente precedute dal segno. Una delle due stringe, ma non entrambe, può essere vuota.
+  - floating point: numero intero o frazionario, seguito da “e”, oppure “E”, seguito da un numero intero.
+
+Per ciascuna sequenza riconosciuta, stampare in uscita: la sequenza stessa, il tipo di numero rappresentato, il numero di cifre usate nella rappresentazione.
+*/
+
+%{
+    /* definizioni (opzionale) */
+    #include <stdio.h>
+    int intCount = 0;
+    int fracCount = 0;
+    int floatCount = 0;
+%}
+
+DIGIT           [0-9]
+SIGN            [+-]
+INTERO          {SIGN}?{DIGIT}+
+FRAZIONARIO     {SIGN}?({DIGIT}+.|.{DIGIT}+|{DIGIT}+.{DIGIT}+)
+
+/* regole */
+%%
+{INTERO}                              { printf("%s e' un numero intero lungo %d caratteri.\n", yytext, yyleng); intCount += yyleng; }
+{FRAZIONARIO}                         { printf("%s e' un numero frazionario lungo %d caratteri.\n", yytext, yyleng); fracCount += yyleng; }
+{FRAZIONARIO}?[eE]{SIGN}?{DIGIT}+     { printf("%s e' un numero Floating point lungo %d caratteri.\n", yytext, yyleng); floatCount += yyleng; }
+
+\n                                    /* Ignora i caratteri di nuova riga */
+[ \t]                                 /* Ignora gli spazi e le tabulazioni */
+.                                     /* Ignora qualsiasi altro carattere */
+%%
+
+/* funzioni ausiliari (opzionale) */
+yywrap() {}
+
+int main(int argc, char** argv) {
+    yyin = fopen(argv[1], "r");
+    yylex();
+
+    fclose(yyin);
+    return 0;
+}%
+
+
+
+
+/*
+x--------------------------------------------------------------x ANALIZZATORI SINTATTICI: ESERCIZIO 5 x--------------------------------------------------------------x
+
+Utilizzando Lex-Yacc costruire una coppia di analizzatori, uno lessicale e uno sintattico, che insieme siano capaci di riconoscere un frammento del linguaggio Java formato da:
+  - identificatori,
+  - costanti numeriche,
+  - assegnazione =, assegnazione con incremento +=,
+  - if else,
+  - ciclo while,
+  - separatori ; 
+  - blocchi { }
+
+L’analizzatore deve restituire l’albero della struttura sintattica del comando ricevuto in ingresso.
+*/
+
+// LEX:
+%{
+    /* definizioni */
+    #include <stdio.h>
+    #include "lex.yy.c"
+%}
+
+/* regole */
+%%
+[0-9]+                  { return NUMERIC_CONSTANT; }
+=                       { return ASSIGN; }
+\+=                     { return INCREMENT_ASSIGN; }
+if                      { return IF; }
+else                    { return ELSE; }
+while                   { return WHILE; }
+;                       { return SEMICOLON; }
+\{                      { return LEFT_BRACE; }
+\}                      { return RIGHT_BRACE; }
+[a-z][a-zA-Z0-9_-]*     { return IDENTIFIER; }
+
+[ \t\n]                 ;  // Ignora spazi, tabulazioni e nuove righe
+.                       ;  // Ignora altri caratteri
+%%
+
+yywrap() {return 1;}
+
+int main(int argc, char** argv) {
+    yyin = fopen(argv[1], "r");
+    yylex();
+    fclose(yyin);
+    return 0;
+}%
+
+// YACC
+/* PROLOGO */
+%{
+#include "lex.yy.c"
+
+void yyerror(const char *str) {
+  fprintf(stderr,"errore: %s\n",str);
+}
+
+int yywrap() {return 1;}
+int main() { yyparse();}
+%}
+/* DEFINIZIONI */
+%token NUM
+%left '-' '+'
+%left '*' '/'
+%left NEG /* meno unario */%
+
+
+
+
+/*
+x--------------------------------------------------------------x ANALIZZATORI SINTATTICI: ESERCIZIO 8 x--------------------------------------------------------------x
+
+Utilizzando Lex-Yacc costruire una coppia di analizzatori, uno lessicale e uno sintattico, che insieme siano capaci di riconoscere Sequenze di espressioni in linguaggio Scheme formate da:
+  - identificatori
+  - numeri interi
+  - operazioni aritmetiche: +, *, -
+  - test di uguaglianza: =
+  - le funzioni let e case
+
+L’analizzatore deve restituire gli alberi sintattici delle espressioni ricevute.
+*/
+
+// LEX:
+%{
+#include "y.tab.h"
+%}
+
+%%
+[a-zA-Z_][a-zA-Z0-9_]*    { yylval.s = strdup(yytext); return IDENTIFIER; }
+
+[0-9]+                    { yylval.i = atoi(yytext); return NUMBER; }
+
+"+"                       { return PLUS; }
+"-"                       { return MINUS; }
+"*"                       { return MULTIPLY; }
+"="                       { return EQUAL; }
+
+"let"                     { return LET; }
+"case"                    { return CASE; }
+
+[ \t\n]+                  { /* Ignora */ }
+";.*"                     { /* Ignora commenti */ }
+.                         { fprintf(stderr, "Carattere non riconosciuto: %s\n", yytext); }
+%%
+
+int yywrap() {
+    return 1;
+}
+
+// YACC
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    char* type;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+Node* newNode(char* type, Node* left, Node* right) {
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->type = type;
+    node->left = left;
+    node->right = right;
+    return node;
+}
+
+void yyerror(const char* s);
+int yylex();
+%}
+
+%union {
+    char* s;  // Stringa per identificatori e tipi
+    int i;    // Interi per numeri
+}
+
+%token <s> IDENTIFIER
+%token <i> NUMBER
+%token PLUS MINUS MULTIPLY EQUAL LET CASE
+%type <s> expression let_expression case_expression
+
+%%
+
+// Regole grammaticali
+program:
+    | program expression
+    ;
+
+expression:
+      IDENTIFIER                        { $$ = newNode($1, NULL, NULL); }
+    | NUMBER                            { $$ = newNode("number", NULL, NULL); }
+    | expression PLUS expression        { $$ = newNode("plus", $1, $3); }
+    | expression MINUS expression       { $$ = newNode("minus", $1, $3); }
+    | expression MULTIPLY expression    { $$ = newNode("multiply", $1, $3); }
+    | EQUAL expression expression       { $$ = newNode("equal", $2, $3); }
+    | let_expression
+    | case_expression
+    ;
+
+let_expression:
+    LET IDENTIFIER expression { $$ = newNode("let", newNode($2, NULL, NULL), $3); }
+    ;
+
+case_expression:
+    CASE expression { $$ = newNode("case", $2, NULL); }
+    ;
+%%
+
+void yyerror(const char* s) {
+    fprintf(stderr, "Errore: %s\n", s);
+}
+
+int main() {
+    return yyparse();
+}
