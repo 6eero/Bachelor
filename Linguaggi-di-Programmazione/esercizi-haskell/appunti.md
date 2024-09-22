@@ -21,6 +21,11 @@ sqrt $ abs (-16)
 [1..1000] !! 453 -- 454
 ~~~
 
+#### Operatore di modulo `mod`
+~~~ haskell
+x `mod` n
+~~~
+
 ## Funzioni
 
 #### Funzione `map`
@@ -34,17 +39,17 @@ map ceiling $ map sqrt [10, 30, 60] -- [4,6,8]
 -- fixPair prende una coppia e la ritorna ordinata
 fixPair :: (Int, Int) -> (Int, Int)
 fixPair (a, b) = if a > b then (b, a) else (a, b)
+
 -- uso fixPair su ogni elemento di una lista di coppie per tornare una lista di coppie ordinate
 fixListPairs :: [(Int, Int)] -> [(Int, Int)]
 fixListPairs = map fixPair
 ~~~
 
 #### Funzione `all`
-`All` è una funzione standard in Haskell che prende in input una funzione e una lista, e verifica se la funzione restituisce True per ogni elemento della lista (scorre la lista e assegna ad x il valore in test). 
+`All` prende in input una funzione e una lista, e verifica se la funzione restituisce True per ogni elemento della lista (scorre la lista e assegna ad x il valore in test). 
 
 ~~~ haskell
 all (\x -> even x) [2, 4, 6, 8] -- true
-all (\x -> even x) [2, 3, 6, 8] -- false
 ~~~
 
 #### Funzione `filter`
@@ -59,7 +64,7 @@ filter (\lst -> (lst !! 0 < lst !! 1)) [[1,2],[3,2],[5,9]] -- [[1,2],[5,9]]
 ~~~
 
 #### Funzione `zip`
-`Zip` applicato a due liste, restituisce una lista di coppie formate tuplando insieme gli elementi corrispondenti delle liste date. Se le due liste sono di lunghezza diversa, la lunghezza della lista risultante è quella della più corta. 
+`Zip` restituisce una lista di coppie formate tuplando insieme gli elementi corrispondenti delle liste date. 
 
 ~~~ haskell
 zip [1..6] "abcd" -- [(1,'a'),(2,'b'),(3,'c'),(4,'d')]
@@ -82,21 +87,17 @@ zipWith (\x y -> x == y) [1,2,3] [1,2,3] --[True,True,True]
 La funzione `foldr` applica la funzione passata come input al valore iniziale e all' elemento piu a destra della lista, poi applica il risultato dell'operazione all'elemento successivo, e così via fino alla fine della lista.
 
 ~~~ haskell
--- Esegue l'or di tutti gli elementi della lista, partendo da un booleano falso
 foldr (||) False [True,False,False] --True
-
--- Somma tutti gli elementi di una lista
 foldr (+) 0 [1, 2, 3] -- 1 + (2 + (3 + 0)) = 6
 ~~~
 
-#### Funzione `tail`
-`tail` applicata ad una lista, la ritorna senza il primo elemento
-
+#### Funzioni `head`, `init`, `tail`, `last`
 ~~~ haskell
-tail [1,2,3] --[2,3]
+head [1,2,3] -- 1
+init [1,2,3] -- [1,2]
+tail [1,2,3] -- [2,3]
+last [1,2,3] -- 3
 ~~~
-
-<br>
 
 # Liste
 ## Funzioni 
@@ -127,8 +128,6 @@ quicksort [x] = [x]
 quicksort (pivot:xs) = quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quicksort [x | x <- xs, x > pivot]
 ~~~ 
 
-<br>
-
 # Matrici
 ## Funzioni 
 ~~~ haskell
@@ -137,6 +136,16 @@ quicksort (pivot:xs) = quicksort [x | x <- xs, x <= pivot] ++ [pivot] ++ quickso
 transpose :: [[a]] -> [[a]]
 transpose ([]:_) = []
 transpose x = map head x : transpose (map tail x)
+
+-- torna true se la matrice e' simmetrica
+isSymmetric :: Eq a => [[a]] -> Bool
+isSymmetric [] = True
+isSymmetric x = x == transpose x
+
+-- ritorna la diagonale della matrice
+getMatrixDiagonal :: [[Int]] -> [Int]
+getMatrixDiagonal [] = []
+getMatrixDiagonal (x:xs) = head x : getMatrixDiagonal (map tail xs)
 ~~~ 
 
 <br>
@@ -174,12 +183,12 @@ bstInsert x (Node val left right)
   | otherwise = Node val left (bstInsert x right)
 
 -- ritorna true se l'elemento dato come input esiste nel BST
-bstElem :: (Ord a) => BST a -> a -> Bool
-bstElem Void _ = False
-bstElem (Node val left right) n
+containsElement :: (Ord a) => BST a -> a -> Bool
+containsElement Void _ = False
+containsElement (Node val left right) n
   | n == val = True
-  | n > val = bstElem right n
-  | n < val = bstElem left n 
+  | n > val = containsElement right n
+  | n < val = containsElement left n 
 
 -- ritorna la somma di tutti gli elementi in un albero
 bstSum :: Num a => BST a -> a
@@ -237,30 +246,69 @@ treeFold :: (Eq a, Show a) => (a -> [b] -> b) -> b -> Tree a -> b
 treeFold _ base Nil = base
 treeFold fun base (Vertex x children) = fun x (map (treeFold fun base) children)
 
--- funzione che somma tutti i nodi dell'albero
+-- ritorna l'altezza
+height :: (Eq a, Show a) => Tree a -> Int
+height = treeFold (\_ heights -> 1 + (if null heights then 0 else maximum heights)) (-1)
+
+-- ritorna il grado (numero max di figli)
+degree :: (Eq a, Show a) => Tree a -> Int
+degree = treeFold (\_ children -> 1 + maximum (0 : children)) 0
+
+-- somma tutti i nodi dell'albero
 sumTree :: (Eq a, Num a) => Tree a -> a
 sumTree = treeFold (\x xs -> x + sum xs) 0
 
--- funzione che concatena tutte le stringhe dell'albero
+-- concatena tutte le stringhe dell'albero
 concatTree :: Tree String -> String
 concatTree = treeFold (\x xs -> x ++ concat xs) ""
 
--- funzione che sostituise i numeri dispari con 0
+-- ostituise i numeri dispari con 0
 removeOddTree :: Tree Int -> Tree Int
 removeOddTree = treeFold (\x cleanChildren -> if odd x then Vertex 0 cleanChildren else Vertex x cleanChildren) Nil
 
--- funzione che conta il numero totale di nodi
+-- conta il numero totale di nodi
 countNodes :: Eq a => Tree a -> Int
 countNodes = treeFold (\_ xs -> 1 + sum xs) 0
 
--- funzione ritorna che il minimo valore in un albero
+-- ritorna che il minimo valore in un albero
 minTree :: (Ord a) => Tree a -> a
 minTree = treeFold (\x xs -> minimum (x : xs)) (error "Empty tree")
 
--- funzione che verifica se esiste un valore che soddisfa una certa condizione
+-- verifica se esiste un valore che soddisfa una certa condizione
 -- existsCondition (==2) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
--- existsCondition (<3) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
--- existsCondition (even) (Vertex 5 [Vertex 3 [], Vertex 2 []]) -> True
 existsCondition :: Eq a => (a -> Bool) -> Tree a -> Bool
 existsCondition condition = treeFold (\x xs -> condition x || or xs) False
+
+-- ritorna l'albero con tutti i nodi che hanno valore moltiplicato per 3
+tripleNodeValue :: (Num a, Eq a, Show a) => Tree a -> Tree a
+tripleNodeValue = treeFold (\x children -> Vertex (3 * x) children) Nil
+~~~ 
+
+
+# Quad Tree
+## Definizione 
+~~~ haskell
+data QT a = C a | Q (QT a) (QT a) (QT a) (QT a) deriving (Eq , Show)
+~~~ 
+Un esempio e' il seguente: 
+
+~~~ haskell
+Q
+  (Q (C 1) (C 2) (C 3) (C 4))
+  (Q (C 5) (C 6) (C 7) (C 8))
+  (Q (C 9) (C 10) (C 11) (C 12))
+  (Q (C 13) (C 14) (C 15) (C 16))
+~~~ 
+
+## Funzioni
+~~~ haskell
+areLeavesEqual :: (Eq a) => QT a -> QT a -> QT a -> QT a -> Bool  -- controlla se le foglie di un QT sono uguali
+areLeavesEqual qt1 qt2 qt3 qt4
+  | qt1 == qt2 && qt2 == qt3 && qt3 == qt4 = True
+  | otherwise = False
+
+-- dato un termine di tipo QT genera il QuadTree corrispondente.
+simplifyQT :: (Eq a) => QT a -> QT a
+simplifyQT (C a) = C a
+simplifyQT (Q qt1 qt2 qt3 qt4) = buildNSimplify (simplifyQT qt1) (simplifyQT qt2) (simplifyQT qt3) (simplifyQT qt4)
 ~~~ 
