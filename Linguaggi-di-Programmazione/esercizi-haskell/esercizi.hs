@@ -1,6 +1,8 @@
 {----------------------------------------x NUMERI x----------------------------------------}
 
 -- 1 Si scriva la funzione fattoriale. Si verifichi il funzionamento calcolando 10000!
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Use foldr" #-}
 factorial :: Int -> Int
 factorial 0 = 1
 factorial n = n * factorial (n - 1)
@@ -271,6 +273,7 @@ areLeavesEqual qt1 qt2 qt3 qt4
   | qt1 == qt2 && qt2 == qt3 && qt3 == qt4 = True
   | otherwise = False
 
+
 -- 2. Si scriva una funzione simplify che dato un termine di tipo QT genera il QuadTree corrispondente.
 simplifyQT :: (Eq a) => QT a -> QT a
 simplifyQT (C a) = C a
@@ -280,6 +283,7 @@ simplifyQT (Q qt1 qt2 qt3 qt4) = buildNSimplify (simplifyQT qt1) (simplifyQT qt2
 
 
 {----------------------------------------x MATRICI MEDIANTE QUAD TREE x----------------------------------------}
+
 data Mat a = Mat {
   nexp :: Int ,
   mat :: QT a
@@ -295,7 +299,6 @@ lowertriangular :: (Eq a, Num a) => Mat a -> Bool
 lowertriangular (Mat 0 (C a)) = a == 0
 lowertriangular (Mat n (Q a b c d)) =
   isZero b &&                       -- quadrante superiore dx
-                         -- quadrante superiore dx
   lowertriangular (Mat (n-1) a) &&  -- quadrante superiore sx 
   lowertriangular (Mat (n-1) d)     -- quadrante inferiore sx
 lowertriangular _ = False
@@ -313,11 +316,11 @@ uppertriangular _ = False
 
 
 
-{----------------------------------------x ESERCIZI EXTRA, PER FARE PRATICA x----------------------------------------}
+{----------------------------------------x ESERCIZI EXTRA DA VECCHI ESAMI, PER FARE PRATICA x----------------------------------------}
 
 -- Esame 12 settembre 2022
 -- Si scrivano le seguenti funzioni Haskell:
--- 1. una funzione che date due liste determina se una delle due e' una sottolista dell’altra; => per ogni elemento della prima lista lo cerco nella seconda
+-- una funzione che date due liste determina se una delle due e' una sottolista dell’altra; => per ogni elemento della prima lista lo cerco nella seconda
 isSublist :: (Eq a) => [a] -> [a] -> Bool
 isSublist _ [] = False
 isSublist sub lst@(x:xs)
@@ -329,14 +332,16 @@ isSublist sub lst@(x:xs)
     isPrefixOf (p:ps) (l:ls) =
       (p == l) && isPrefixOf ps ls
 
--- 2. una funzione che data una lista determina se questa e' palindroma;
+
+-- una funzione che data una lista determina se questa e' palindroma;
 isPalyndrome :: [Int] -> Bool
 isPalyndrome [] = False
 isPalyndrome [x] = True
 isPalyndrome (x:xs) =
   (x == last xs) && isPalyndrome (init xs)
 
--- 3. una funzione che data una lista determina la lunghezza della piu' lunga sottolista finale palindroma;
+
+-- una funzione che data una lista determina la lunghezza della piu' lunga sottolista finale palindroma;
 getLenOfTheLastPalyndrome :: [Int] -> Int
 getLenOfTheLastPalyndrome [] = 0
 getLenOfTheLastPalyndrome [x] = 0
@@ -345,23 +350,23 @@ getLenOfTheLastPalyndrome (x:xs) =
     then length (x:xs)
     else getLenOfTheLastPalyndrome xs
 
--- 4. una funzione che data una lista determina la lunghezza della piu' lunga sottolista palindroma.
-
 
 
 
 -- Esame 4 luglio 2022 
 -- Su liste aventi come elementi coppie di valori di uno stesso tipo ordinabile, scrivere le seguenti funzioni Haskell:
--- 1. una funzione che data una lista restituisce la lista contenente le sole coppie ordinate (il primo elemento della coppia e'minore del secondo);
+-- una funzione che data una lista restituisce la lista contenente le sole coppie ordinate (il primo elemento della coppia e'minore del secondo);
 getOrderedPairs :: [[Int]] -> [[Int]]
 getOrderedPairs = filter (\lst -> head lst < lst !! 1)
 
--- 2. una funzione che data una lista di coppie le ordina, ossia scambia tra loro gli elementi di una coppie in modo che il primo sia minore del secondo;
+
+-- una funzione che data una lista di coppie le ordina, ossia scambia tra loro gli elementi di una coppie in modo che il primo sia minore del secondo;
 fixPair :: (Int, Int) -> (Int, Int)
 fixPair (a, b) =
   if a > b
     then (b, a)
     else (a, b)
+
 
 -- versione con funzione map: 
 fixListPairs :: [(Int, Int)] -> [(Int, Int)]
@@ -371,7 +376,8 @@ fixListPairs = map fixPair
 --fixListPairs [] = []
 --fixListPairs (x:xs) = fixPair x : fixListPairs xs
 
--- 3. considerando l’ordine lessicografico tra le coppie, definire una funzione che data una lista di coppie la ordina.
+
+-- considerando l’ordine lessicografico tra le coppie, definire una funzione che data una lista di coppie la ordina.
 orderPairList :: [(Int, Int)] -> [(Int, Int)]
 orderPairList [] = []
 orderPairList xs = quicksort xs
@@ -379,67 +385,146 @@ orderPairList xs = quicksort xs
 
 
 
--- Esame 4 luglio 2022 
--- Scrivere le seguenti funzioni in Haskell:
--- 1. una funzione che, dati un lista e un suo possibile elemento, determina se l’elemento appartiene alla lista;
-containsElement :: [Int] -> Int -> Bool
-containsElement [] _ = False
-containsElement (x:xs) n =
-  (x == n) || containsElement xs n
+-- Esame 15 giugno 2022 
+-- Scrivere le seguenti funzioni Haskell:
+-- una funzione che in una lista di booleani conta il numero di elemeniti uguali a True presenti nella lista
+countTrue :: [Bool] -> Int
+countTrue [] = 0
+countTrue (x:xs)
+  | x = 1+countTrue xs
+  | otherwise = countTrue xs
 
--- 2. una funzione che, dati un lista e un suo elemento, restituisce la lista originale senza l’elemento;
+
+-- una funzione che data una lista di elementi ed un valore conta il numero di volte che il valore appare nella lista;
+countVal :: Eq a => [a] -> a -> Int
+countVal [] _ = 0
+countVal (x:xs) n
+  | x == n = 1+countVal xs n
+  | otherwise = countVal xs n
+
+
+-- una funzione che data una lista determina il numero di massimo di ripetizioni, non necessariamente consecutive, di una stesso valore nella lista.
+countMax :: Eq a => [a] -> Int
+countMax [] = 0
+countMax x = countMaxHelper x 0
+  where
+    countMaxHelper :: Eq a => [a] -> Int -> Int
+    countMaxHelper [] n = n
+    countMaxHelper (x:xs) n
+      | countVal (x:xs) x > n = countMaxHelper xs (countVal (x:xs) x)
+      | otherwise = countMaxHelper xs n
+
+
+
+
+-- Esame 7 settembre 2021 
+-- Scrivere le seguenti funzioni Haskell:
+-- una funzione che, dati un lista e un suo possibile elemento, determina se l’elemento appartiene alla lista;
+checkElement :: Eq a => [a] -> a -> Bool
+checkElement [] _ = False
+checkElement (x:xs) el
+  | x == el = True
+  | otherwise = checkElement xs el
+
+
+-- una funzione che, dati un lista e un suo elemento, restituisce la lista originale senza l’elemento;
+{- 
+-- versione non ricorsiva
 removeElement :: [Int] -> Int -> [Int]
 removeElement [] _ = []
 removeElement xs n = filter (/= n) xs
-
--- 3. usando le due funzioni precedenti, definire una funzione che date due liste determina se una e' la permutazione dell’altra;
-checkPermutation :: [Int] -> [Int] -> Bool
-checkPermutation [] _ = False
-checkPermutation _ [] = False
-checkPermutation [a] [b] = a == b
-checkPermutation (x:xs) ls =
-  containsElement ls x && checkPermutation xs (removeElement ls x)
-
--- 4. una funzione che data una matrice, memorizzata per righe, determina se le righe della matrice sono le sono tutte permutazioni di una stessa lista
-checkRows :: [[Int]] -> Bool  --[[1,2,3], [2,1,3], [3,2,1]]
-checkRows [] = True
-checkRows (x:xs) = all (checkPermutation x) xs
+-}
+rmvElement :: Eq a => [a] -> a -> [a]
+rmvElement [] _ = []
+rmvElement (x:xs) el
+  | x == el = rmvElement xs el
+  | otherwise = x : rmvElement xs el
 
 
+-- usando le due funzioni precedenti, definire una funzione che date due liste determina se una e'la permutazione dell’altra;
+isAPermutation :: Eq a => [a] -> [a] -> Bool
+isAPermutation [] _ = True
+isAPermutation _ [] = True
+isAPermutation (x:xs) y
+  | checkElement y x = isAPermutation xs (rmvElement y x)
+  | otherwise = False
 
 
--- Esame  9 settembre 2019 
--- Si scriva una funzione Haskell che, prese in ingresso due liste strettamente ordinate xs e ys, costruisca una terza lista strettamente ordinata contenente tutti gli elementi che appaiono in almeno una delle due le liste xs e ys. Si rispetti percio il vincolo che se un elemento appare sia in xs che in ys, allora deve apparire un’unica volta nella lista risultato.
-mergeAndOrderLists :: [Int] -> [Int] -> [Int]
-mergeAndOrderLists [] ys = quicksort ys
-mergeAndOrderLists xs [] = quicksort xs
-mergeAndOrderLists (x:xs) ys =
-  if containsElement ys x
-    then mergeAndOrderLists xs ys
-    else mergeAndOrderLists xs (ys ++ [x])
 
--- Si scriva inoltre una funzione Haskell che, presa in ingresso una matrice memorizzata per righe, in cui ogni riga e' strettamente ordinata, costruisca una lista strettamente ordinata contenente tutti gli elementi che appaiono in almeno una riga della matrice.
-mergeAndOrderMatrix :: [[Int]] -> [Int]
-mergeAndOrderMatrix [] = []
-mergeAndOrderMatrix xs = foldr mergeAndOrderLists [] xs
+
+-- Esame 15 giugno 2021
+-- Si scrivano le seguenti funzioni Haskell:
+-- una funzione che dato un naturale n costruisca la lista dei fattori primi di n, scritti in ordine crescente, es con ingresso 12 la funzione restituisce [2, 2, 3]
+getPrime :: Int -> [Int]
+getPrime 0 = []
+getPrime 1 = []
+getPrime x = getPrimeHelper x 2
+  where
+    getPrimeHelper :: Int -> Int -> [Int]
+    getPrimeHelper x n
+      | x `mod` n /= 0 = getPrimeHelper x (n+1)
+      | otherwise = n : getPrime (x `div` n)
+
+
+-- una funzione che date due liste di fattori primi, scritte in ordine crescente, restituisce la lista dei fattori primi presenti in almeno una delle due liste, con molteplicit`a massima.
+mergePrimeLists :: [Int] -> [Int] -> [Int]
+mergePrimeLists [] y = y
+mergePrimeLists x [] = x
+mergePrimeLists (x:xs) (y:ys)
+  | x == y = x : mergePrimeLists xs ys
+  | x < y = x : mergePrimeLists xs (y:ys)
+  | otherwise = y : mergePrimeLists (x:xs) ys
+
+
+-- usando le due funzione precedenti definire una funzione per il calcolo del minimo comune multiplo tra due naturali
+getMCM :: Int -> Int -> Int
+getMCM x y = product (mergePrimeLists (getPrime x) (getPrime y))
+
+
+-- si scriva una versione alternativa alla funzione precedente, usando le funzioni fold, se non usate nella versione originale, o non usandole, in caso contrario.
+getMCMRecursive :: Int -> Int -> Int
+getMCMRecursive x y = getMCMRecursiveHelper (mergePrimeLists (getPrime x) (getPrime y))
+  where
+    getMCMRecursiveHelper :: [Int] -> Int
+    getMCMRecursiveHelper [] = 1
+    getMCMRecursiveHelper (x:xs) = x * getMCMRecursiveHelper xs
+
+
+
+
+-- Esame 9 settembre 2019
+-- Si scriva una funzione Haskell che, prese in ingresso due liste strettamente ordinate xs e ys, costruisca una terza lista strettamente ordinata contenente tutti gli elementi che appaiono in almeno una delle due le liste xs e ys. Si rispetti perci`o il vincolo che se un elemento appare sia in xs che in ys, allora deve apparire un’unica volta nella lista risultato.
+mergeLists :: [Int] -> [Int] -> [Int]
+mergeLists [] y = y
+mergeLists x [] = x
+mergeLists (x:xs) (y:ys)
+  | x == y = x : mergeLists xs ys
+  | x < y = x : mergeLists xs (y:ys)
+  | otherwise = y : mergeLists (x:xs) ys
+
+
+-- Si scriva inoltre una funzione Haskell che, presa in ingresso una matrice memorizzata per righe, in cui ogni riga `e strettamente ordinata, costruisca una lista strettamente ordinata contenente tutti gli elementi che appaiono in almeno una riga della matrice.
+mergeMatrix :: [[Int]] -> [Int]
+mergeMatrix = foldr mergeLists []
+
+mergeMatrixRecursive :: [[Int]] -> [Int]
+mergeMatrixRecursive [] = []
+mergeMatrixRecursive (x:xs) = mergeLists x (mergeMatrixRecursive xs)
 
 
 
 
 -- Esame 2 luglio 2019
 -- Si scriva una funzione Haskell che, presa in ingresso una matrice quadrata, memorizzata per righe, restituisca in uscita la sottomatrice ottenuta eliminando la prima riga e la prima colonna alla matrice originaria. 
-removeRows :: [[Int]] -> [[Int]]
-removeRows [] = []
-removeRows (x:xs) = init xs
+simplifyMatrix :: [[Int]] -> [[Int]]
+simplifyMatrix [] = []
+simplifyMatrix (x:xs) = map init xs
 
--- Si scriva inoltre una funzione Haskell che, preso in ingresso una matrice quadrata, memorizzata per righe, restituisca la lista degli elementi contenuti nella diagonale della matrice.
-getDiagonal :: [[Int]] -> [Int]
-getDiagonal [] = []
-getDiagonal xs = getDiagonalHelper xs 0
-  where
-    getDiagonalHelper :: [[Int]] -> Int -> [Int]
-    getDiagonalHelper [] _ = []
-    getDiagonalHelper (x:xs) pos = (x !! pos) : getDiagonalHelper xs (pos + 1)
+
+-- Si scriva inoltre una funzione Haskell che, preso in ingresso una matrice quadrata, memorizzata per righe, restituisca la lista degli elementi contenuti nella diagonale della matrice. Si commenti il codice e si definisca il tipo di ogni funzione definita
+getMatrixDiagonal :: [[Int]] -> [Int]
+getMatrixDiagonal [] = []
+getMatrixDiagonal (x:xs) = head x : getMatrixDiagonal (map tail xs)
 
 
 
@@ -457,66 +542,3 @@ buildBoard n = buildList n : buildBoardHelper n (n - 1)
 buildBoardHelper :: Int -> Int -> [[Int]]
 buildBoardHelper _ 0 = []
 buildBoardHelper n m = buildList n : buildBoardHelper n (m-1)
-
-
-
-
--- Esame  15 giugno 2022 
--- Scrivere le seguenti funzioni Haskell:
--- una funzione che in una lista di booleani conta il numero di elemeniti uguali a True presenti nella lista
-countTrue :: [Bool] -> Int
-countTrue [] = 0
-countTrue (x:xs)
-  | x = 1+countTrue xs
-  | otherwise = countTrue xs
-
--- una funzione che data una lista di elementi ed un valore conta il numero di volte che il valore appare nella lista;
-countVal :: Eq a => [a] -> a -> Int
-countVal [] _ = 0
-countVal (x:xs) n
-  | x == n = 1+countVal xs n
-  | otherwise = countVal xs n
-
--- una funzione che data una lista determina il numero di massimo di ripetizioni, non necessariamente consecutive, di una stesso valore nella lista.
-countMax :: Eq a => [a] -> Int
-countMax [] = 0
-countMax x = countMaxHelper x 0
-  where
-    countMaxHelper :: Eq a => [a] -> Int -> Int
-    countMaxHelper [] n = n
-    countMaxHelper (x:xs) n
-      | countVal (x:xs) x > n = countMaxHelper xs (countVal (x:xs) x)
-      | otherwise = countMaxHelper xs n
-
-
-
-
--- Esame  15 giugno 2022 
--- Scrivere le seguenti funzioni Haskell:
--- una funzione che, dati un lista e un suo possibile elemento, determina se l’elemento appartiene alla lista;
-checkElement :: Eq a => [a] -> a -> Bool
-checkElement [] _ = False
-checkElement (x:xs) el
-  | x == el = True
-  | otherwise = checkElement xs el
-
--- una funzione che, dati un lista e un suo elemento, restituisce la lista originale senza l’elemento;
-{- 
--- versione non ricorsiva
-removeElement :: [Int] -> Int -> [Int]
-removeElement [] _ = []
-removeElement xs n = filter (/= n) xs
--}
-rmvElement :: Eq a => [a] -> a -> [a]
-rmvElement [] _ = []
-rmvElement (x:xs) el
-  | x == el = rmvElement xs el
-  | otherwise = x : rmvElement xs el
-
--- usando le due funzioni precedenti, definire una funzione che date due liste determina se una e'la permutazione dell’altra;
-isAPermutation :: Eq a => [a] -> [a] -> Bool
-isAPermutation [] _ = True
-isAPermutation _ [] = True
-isAPermutation (x:xs) y
-  | checkElement y x = isAPermutation xs (rmvElement y x)
-  | otherwise = False
